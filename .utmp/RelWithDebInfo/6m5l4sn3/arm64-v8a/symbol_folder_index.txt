@@ -1,0 +1,1 @@
+F:\UnityNewProject\StickerDemo\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\6m5l4sn3\obj\arm64-v8a
