@@ -69,7 +69,7 @@ Material:
     - _NormalScale: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Radius: 0.0000000031298095
+    - _Radius: 0
     - _ReceiveShadows: 1
     - _SecondGlossiness: 15.7
     - _SecondSpecularDirectionStrength: 0.5
@@ -77,7 +77,7 @@ Material:
     - _ShadowOffsetX: 0
     - _ShadowOffsetY: 0.02
     - _Smoothness: 19.9
-    - _SpecPitch1: -4.3
+    - _SpecPitch1: -22
     - _SpecPitch2: -46.2
     - _SpecYaw1: -59
     - _SpecYaw2: 44
@@ -93,8 +93,8 @@ Material:
     - _SecondSpecularColor: {r: 0.3815761, g: 2.9960785, b: 1.5737684, a: 1}
     - _SecondSpecularDirection: {r: -4.57, g: -5.8, b: -2.32, a: 0}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 0.5019608}
-    - _SpecularColor: {r: 2.6082375, g: 2.6082375, b: 2.6082375, a: 1}
+    - _SpecularColor: {r: 6.883181, g: 6.883181, b: 6.883181, a: 1}
     - _SpecularDirection: {r: -1, g: 0, b: 1, a: 0}
-    - _SphereCenter: {r: -1.5780566, g: 5.0772247, b: 0, a: 0}
+    - _SphereCenter: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -4,7 +4,7 @@ using UnityEngine.Playables;
 
 public class PuzzlePiece : MonoBehaviour
 {
-    private Vector3 _startPosition; // 拼图块的初始位置
+    public Vector3 _startPosition; // 拼图块的初始位置
     private bool _isDragging; // 标记是否正在拖拽
     public Transform targetArea; // 拼图块的目标区域
     public float snapDistance = 1.0f; // 自动吸附的距离阈值
@@ -175,6 +175,8 @@ public class PuzzlePiece : MonoBehaviour
     // 鼠标按下时触发
     void OnMouseDown()
     {
+        UpdateBaseStartPosition(); // 拖拽前更新初始位置记录
+
         if (isLocked) // 新增：如果已锁定，则不允许拖动
         {
             return;
@@ -348,10 +350,7 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：当父对象移动后，调用此方法来更新拼图块的初始位置记录
     public void UpdateBaseStartPosition()
     {
-        // 仅当拼图块未被锁定且未被拖拽时，才更新其起始位置
-        // 这是为了确保拖拽中的拼图块如果未吸附，会返回到它被拿起时的位置，
-        // 而不是父对象移动后的新位置。
-        // 对于未被拖拽且未锁定的拼图块，它们的"家"位置确实改变了。
+        
         if (!isLocked && !_isDragging)
         {
             _startPosition = transform.position;
