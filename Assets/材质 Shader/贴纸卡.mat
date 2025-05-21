@@ -95,6 +95,6 @@ Material:
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 0.5019608}
     - _SpecularColor: {r: 6.883181, g: 6.883181, b: 6.883181, a: 1}
     - _SpecularDirection: {r: -1, g: 0, b: 1, a: 0}
-    - _SphereCenter: {r: 0, g: 0, b: 0, a: 0}
+    - _SphereCenter: {r: -0.36298501, g: 5.23751, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
