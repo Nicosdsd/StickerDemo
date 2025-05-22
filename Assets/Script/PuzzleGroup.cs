@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic; // 新增：为了使用 List
+using UnityEngine.Playables; // 新增：为了使用 PlayableDirector
 
 [System.Serializable] // 新增：使该类可以在Inspector中编辑
 public class ScoreCameraMapping
@@ -28,6 +29,7 @@ public class PuzzleGroup : MonoBehaviour
     public float finishTimel = 1;
     public Animator sphereMaskAni;
     public Transform cameraPos; // 用于控制的摄像机移动
+    public PlayableDirector finishTimeline; // 新增：完成时播放的Timeline
     
     public List<ScoreCameraMapping> scoreCameraMappings; // 新增：存储分数与摄像机位置的映射
     public float cameraMoveSpeed = 5f; // 新增：控制摄像机移动速度
@@ -133,6 +135,39 @@ public class PuzzleGroup : MonoBehaviour
 
         sphereMaskAni.transform.position = new Vector3(0, 0, 0);
         sphereMaskAni.SetTrigger("Finish");
+
+        // 新增：播放Timeline动画
+        if (finishTimeline != null)
+        {
+            finishTimeline.Play();
+        }
+        else
+        {
+            Debug.LogWarning("finishTimeline is not assigned in the Inspector.");
+        }
+
+        // 新增：修改摄像机投影大小
+        if (cameraPos != null)
+        {
+            Camera mainCamera = cameraPos.GetComponent<Camera>();
+            if (mainCamera != null && mainCamera.orthographic)
+            {
+                mainCamera.orthographicSize = 13f;
+            }
+            else if (mainCamera != null && !mainCamera.orthographic)
+            {
+                Debug.LogWarning("Camera is not orthographic. Projection size not changed for perspective camera.");
+            }
+            else
+            {
+                Debug.LogWarning("Camera component not found on cameraPos.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("cameraPos is not assigned in the Inspector.");
+        }
+
 
         PuzzlePiece[] pieces = FindObjectsOfType<PuzzlePiece>();
         foreach (PuzzlePiece piece in pieces)

@@ -63,7 +63,7 @@ public class PuzzlePiece : MonoBehaviour
         // 最好是将所有协程都用一个变量引用，或者使用 StopAllCoroutines()，但这可能会停止其他不相关的协程。
 
         transform.position = targetArea.position;
-        transform.localScale = Vector3.one; // 确保Scale设置为1
+        transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 确保Scale设置为DragScale
 
         if (animator != null)
         {
