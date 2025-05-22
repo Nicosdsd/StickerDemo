@@ -34,9 +34,7 @@ public class PuzzlePiece : MonoBehaviour
     public bool isLocked = false; // 新增：标记拼图块是否已锁定
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
     private float _currentApplyingOffsetY = 0f; // 新增：用于平滑处理offsetOnClick的当前Y偏移值
-
-    private SphereMaskController sphereMaskController;
-    // private PlayableDirector sphereMaskPlayableDirector;
+    private DragCenter dragCenter;
 
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked
@@ -98,21 +96,6 @@ public class PuzzlePiece : MonoBehaviour
         //     _targetAreaSprite.enabled = false; // 隐藏目标区域提示
         // }
 
-        if (sphereMaskController != null)
-        {
-            sphereMaskController.transform.position = targetArea.position;
-             // 如果 sphereMaskController 有完成动画，也可以在这里触发
-            Animator sphereAnimator = sphereMaskController.GetComponent<Animator>();
-            if (sphereAnimator != null)
-            {
-                sphereAnimator.SetTrigger("Arrive"); // 假设 "Arrive" 是合适的触发器
-            }
-        }
-        else
-        {
-            Debug.LogWarning("SphereMaskController script not found in the scene.");
-        }
-
         // 播放完成音效
         AudioManager.Instance.PlaySound("放下", transform.position); // 使用"放下"音效或一个专门的"完成"音效
 
@@ -124,8 +107,6 @@ public class PuzzlePiece : MonoBehaviour
     // 初始化
     void Start()
     {
-        sphereMaskController = FindObjectOfType<SphereMaskController>();
-       
         _startPosition = transform.position;
         transform.localScale = new Vector3(StartScale, StartScale, StartScale); // 设置初始Scale
         animator = GetComponent<Animator>();
@@ -133,6 +114,8 @@ public class PuzzlePiece : MonoBehaviour
         {
             _targetAreaSprite = targetArea.GetComponent<SpriteRenderer>();
         }
+
+        dragCenter = FindObjectOfType<DragCenter>();
         //RefreshTargetSpriteVisibility(); // 设置初始可见性
     }
 
@@ -204,13 +187,18 @@ public class PuzzlePiece : MonoBehaviour
         RefreshTargetSpriteVisibility(); // 开始拖拽时刷新
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
-        //sphereMaskController.transform.position = transform.position;
+
+        dragCenter.enabled = false;
+
        
     }
 
     // 鼠标抬起时触发
     void OnMouseUp()
     {
+
+        dragCenter.enabled = true;
+        
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
             return;
@@ -260,7 +248,7 @@ public class PuzzlePiece : MonoBehaviour
         {
             if (animator != null)
             {
-                animator.SetTrigger("SelectBlink");
+                animator.SetTrigger("Blink");
             }
             transform.parent = targetArea; // 移动到这里：只有成功吸附才设置父物体
             // 根据目标点的SpriteRenderer设置当前拼图块的Order in Layer
@@ -293,21 +281,13 @@ public class PuzzlePiece : MonoBehaviour
             //this.GetComponent<Collider>().enabled = false; // 旧的禁用 Collider 的代码
             isLocked = true; // 修改：标记为已锁定
 
-            if (sphereMaskController != null)
-            {
-                sphereMaskController.transform.position = targetArea.position;
-            }
-            else
-            {
-                Debug.LogWarning("SphereMaskController script not found in the scene.");
-            }
-
-            //音效
+            // 播放完成音效
             AudioManager.Instance.PlaySound("放下",transform.position);
         }
 
         else
         {
+           
             if (animator != null)
             {
                 //animator.SetTrigger("Reset");
@@ -370,7 +350,7 @@ public class PuzzlePiece : MonoBehaviour
             if (neighborPiece != null && neighborPiece != this &&
                 Vector3.Distance(neighborPiece.transform.position, neighborPiece.targetArea.position) <= snapDistance)
             {
-                sphereMaskController.GetComponent<Animator>().SetTrigger("Arrive");
+                //sphereMaskController.GetComponent<Animator>().SetTrigger("Arrive");
             }
         }
     }

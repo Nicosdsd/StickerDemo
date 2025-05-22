@@ -105,6 +105,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Hardness: 1.83
+    - _HighlightIntensity: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -112,6 +113,7 @@ Material:
     - _QueueOffset: 0
     - _Radius: 0.45
     - _ReceiveShadows: 1
+    - _Shininess: 5
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -123,7 +125,9 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _CustomHighlightDir: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0.5397847, g: 0.6415094, b: 0.40245637, a: 1}
+    - _HighlightColor: {r: 1.003922, g: 2.9960783, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SphereCenter: {r: 0.05, g: 0.63, b: 0, a: 0}
     - _Vector0: {r: 0, g: 0, b: 0, a: 0}

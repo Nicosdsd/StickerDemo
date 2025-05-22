@@ -27,7 +27,7 @@ public class PuzzleGroup : MonoBehaviour
     public int score;
     public int totalScore;
     public float finishTimel = 1;
-    public Animator sphereMaskAni;
+    
     public Transform cameraPos; // 用于控制的摄像机移动
     public PlayableDirector finishTimeline; // 新增：完成时播放的Timeline
     
@@ -133,8 +133,7 @@ public class PuzzleGroup : MonoBehaviour
     {
          AudioManager.Instance.PlaySound("完成", transform.position); 
 
-        sphereMaskAni.transform.position = new Vector3(0, 0, 0);
-        sphereMaskAni.SetTrigger("Finish");
+       
 
         // 新增：播放Timeline动画
         if (finishTimeline != null)
