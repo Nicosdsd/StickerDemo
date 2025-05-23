@@ -184,8 +184,10 @@ public class PuzzlePiece : MonoBehaviour
     {
         UpdateBaseStartPosition(); // 拖拽前更新初始位置记录
 
+
         if (isLocked) // 新增：如果已锁定，则不允许拖动
         {
+            AudioManager.Instance.PlaySound("挤压",transform.position);   
             return;
         }
 
@@ -311,6 +313,8 @@ public class PuzzlePiece : MonoBehaviour
 
             // 播放完成音效
             AudioManager.Instance.PlaySound("放下",transform.position);
+
+            GetComponent<Collider>().enabled = true;
 
             _latticeModifier.enabled = true;
            
