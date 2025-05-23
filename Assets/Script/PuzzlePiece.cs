@@ -202,7 +202,7 @@ public class PuzzlePiece : MonoBehaviour
         RefreshTargetSpriteVisibility(); // 开始拖拽时刷新
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
-        
+        GetComponent<Collider>().enabled = false;
         //dragCenter.enabled = false;
 
     }
@@ -212,7 +212,7 @@ public class PuzzlePiece : MonoBehaviour
     {
 
         //dragCenter.enabled = true;
-        
+       
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
             return;
@@ -234,6 +234,7 @@ public class PuzzlePiece : MonoBehaviour
         }
         else
         {
+           
             AudioManager.Instance.PlaySound("返回", transform.position); // 在开始返回时播放音效
             _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false)); // 移动回初始位置
             StartCoroutine(ChangeScaleOverTime(new Vector3(StartScale, StartScale, StartScale), scaleSmoothSpeed)); // 立刻开始向StartScale过渡
@@ -292,18 +293,19 @@ public class PuzzlePiece : MonoBehaviour
 
             // 禁用当前拼图块脚本
             //this.enabled = false;
-            //this.GetComponent<Collider>().enabled = false; // 旧的禁用 Collider 的代码
+        
             isLocked = true; // 修改：标记为已锁定
 
             // 播放完成音效
             AudioManager.Instance.PlaySound("放下",transform.position);
 
             _latticeModifier.enabled = true;
+           
         }
 
         else
         {
-           
+            GetComponent<Collider>().enabled = true;
             if (animator != null)
             {
                 //animator.SetTrigger("Reset");
