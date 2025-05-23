@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
+using Lattice;
 
 public class PuzzlePiece : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class PuzzlePiece : MonoBehaviour
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
     private float _currentApplyingOffsetY = 0f; // 新增：用于平滑处理offsetOnClick的当前Y偏移值
     private DragCenter dragCenter;
+    private LatticeModifier _latticeModifier; // 新增：LatticeModifier组件的引用
 
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked
@@ -102,6 +104,12 @@ public class PuzzlePiece : MonoBehaviour
         // 可以选择禁用脚本或Collider，但仅设置isLocked通常已足够阻止交互
         // this.enabled = false;
         // GetComponent<Collider>().enabled = false;
+
+        // 新增：成功放下后显示LatticeModifier组件
+        if (_latticeModifier != null)
+        {
+            _latticeModifier.enabled = true;
+        }
     }
 
     // 初始化
@@ -113,6 +121,13 @@ public class PuzzlePiece : MonoBehaviour
         if (targetArea != null)
         {
             _targetAreaSprite = targetArea.GetComponent<SpriteRenderer>();
+        }
+
+        // 新增：获取LatticeModifier组件并默认隐藏
+        _latticeModifier = GetComponentInChildren<LatticeModifier>(true); // true表示也查找非激活的子对象
+        if (_latticeModifier != null)
+        {
+            _latticeModifier.enabled = false;
         }
 
         dragCenter = FindObjectOfType<DragCenter>();
@@ -187,17 +202,16 @@ public class PuzzlePiece : MonoBehaviour
         RefreshTargetSpriteVisibility(); // 开始拖拽时刷新
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
+        
+        //dragCenter.enabled = false;
 
-        dragCenter.enabled = false;
-
-       
     }
 
     // 鼠标抬起时触发
     void OnMouseUp()
     {
 
-        dragCenter.enabled = true;
+        //dragCenter.enabled = true;
         
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
@@ -283,6 +297,8 @@ public class PuzzlePiece : MonoBehaviour
 
             // 播放完成音效
             AudioManager.Instance.PlaySound("放下",transform.position);
+
+            _latticeModifier.enabled = true;
         }
 
         else

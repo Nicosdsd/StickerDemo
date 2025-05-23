@@ -6,8 +6,8 @@ Shader "NewLit"
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		_BaseMap("_BaseMap", 2D) = "white" {}
 		_BaseColor("_BaseColor", Color) = (1,1,1,1)
+		_BaseMap("_BaseMap", 2D) = "white" {}
 		_MetallicGlossMap("_MetallicGlossMap", 2D) = "white" {}
 		_Metallic("_Metallic", Float) = 0
 		_Smoothness("_Smoothness", Float) = 0.5
@@ -3714,8 +3714,8 @@ Shader "NewLit"
 }
 /*ASEBEGIN
 Version=19701
-Node;AmplifyShaderEditor.SamplerNode;10;-624,-320;Inherit;True;Property;_BaseMap;_BaseMap;0;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
-Node;AmplifyShaderEditor.ColorNode;11;-608,-80;Inherit;False;Property;_BaseColor;_BaseColor;1;0;Create;True;0;0;0;False;0;False;1,1,1,1;1,1,1,1;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Node;AmplifyShaderEditor.ColorNode;11;-608,-80;Inherit;False;Property;_BaseColor;_BaseColor;0;0;Create;True;0;0;0;False;0;False;1,1,1,1;1,1,1,1;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Node;AmplifyShaderEditor.SamplerNode;10;-624,-320;Inherit;True;Property;_BaseMap;_BaseMap;1;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.SamplerNode;14;-640,144;Inherit;True;Property;_MetallicGlossMap;_MetallicGlossMap;2;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
 Node;AmplifyShaderEditor.RangedFloatNode;17;-544,384;Inherit;False;Property;_Metallic;_Metallic;3;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;13;-272,0;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
@@ -3801,4 +3801,4 @@ WireConnection;1;4;25;0
 WireConnection;1;5;24;0
 WireConnection;1;6;13;0
 ASEEND*/
-//CHKSM=E2A20BF7B038E2BC6FE16C974DB6D441318F5D05
+//CHKSM=623BB668685EC5DA85D93F681303A666412BB298

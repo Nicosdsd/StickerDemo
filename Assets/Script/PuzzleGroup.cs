@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic; // 新增：为了使用 List
 using UnityEngine.Playables; // 新增：为了使用 PlayableDirector
+using System.Collections; // 新增：为了使用 Coroutine
 
 [System.Serializable] // 新增：使该类可以在Inspector中编辑
 public class ScoreCameraMapping
@@ -21,12 +22,11 @@ public class PuzzleGroup : MonoBehaviour
     private Vector3 puzzleGroupInitialPosition; // 重命名: initialPosition
     private bool isPuzzleGroupMoving = false; // 重命名: isMoving
     private float puzzleGroupElapsedTime = 0f; // 重命名: elapsedTime
-    private bool isCameraActuallyMoving = false; // 新增：跟踪摄像机是否因分数逻辑而实际移动
 
     public int dragObjects; //
     public int score;
     public int totalScore;
-    public float finishTimel = 1;
+    public float finishTime = 1;
     
     public Transform cameraPos; // 用于控制的摄像机移动
     public PlayableDirector finishTimeline; // 新增：完成时播放的Timeline
@@ -35,6 +35,10 @@ public class PuzzleGroup : MonoBehaviour
     public float cameraMoveSpeed = 5f; // 新增：控制摄像机移动速度
 
     private bool allPiecesArrivedTriggered = false; // 新增：标记是否已触发所有拼图块的Arrive动画
+
+    // 新增：用于管理镜头移动协程的字段
+    private Coroutine _cameraMovementCoroutine;
+    private Vector3 _cameraTargetForCoroutine = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue); // 初始化一个不会匹配任何实际位置的值
 
     void Start()
     {
@@ -46,49 +50,60 @@ public class PuzzleGroup : MonoBehaviour
 
     void Update()
     {
-        // 1. Camera Movement Logic
-        isCameraActuallyMoving = false; // 每帧开始时，假定摄像机没有主动移动
+        // 1. Camera Movement Logic with Delay
         if (cameraPos != null && scoreCameraMappings != null && scoreCameraMappings.Count > 0)
         {
-            bool foundScoreMappingThisFrame = false;
-            Vector3 targetCameraPosForCurrentScore = cameraPos.position;
+            Vector3 determinedTargetCameraPos = cameraPos.position; 
+            bool mappingFoundForCurrentScore = false;
 
             foreach (var mapping in scoreCameraMappings)
             {
                 if (score == mapping.scoreValue)
                 {
-                    targetCameraPosForCurrentScore = mapping.cameraPosition;
-                    foundScoreMappingThisFrame = true;
+                    determinedTargetCameraPos = mapping.cameraPosition;
+                    mappingFoundForCurrentScore = true;
                     break;
                 }
             }
 
-            if (foundScoreMappingThisFrame)
+            if (mappingFoundForCurrentScore)
             {
-                // 如果摄像机当前位置与目标位置有明显差异
-                if (Vector3.Distance(cameraPos.position, targetCameraPosForCurrentScore) > 0.01f)
+                bool triggerNewCoroutine = false;
+                if (_cameraMovementCoroutine == null) // No coroutine currently running
                 {
-                    cameraPos.position = Vector3.Lerp(cameraPos.position, targetCameraPosForCurrentScore, Time.deltaTime * cameraMoveSpeed);
-                    isCameraActuallyMoving = true; // 标记摄像机正在主动移动
-                }
-                else
-                {
-                    // 已经很接近目标或已到达，确保精确位置并停止标记移动
-                    if (Vector3.Distance(cameraPos.position, targetCameraPosForCurrentScore) != 0f)
+                    // If not at the target for the current score
+                    if (Vector3.Distance(cameraPos.position, determinedTargetCameraPos) > 0.01f)
                     {
-                        cameraPos.position = targetCameraPosForCurrentScore; // 精确到达目标位置
+                        triggerNewCoroutine = true;
                     }
-                    // isCameraActuallyMoving 保持 false，因为已到达或无需移动
+                }
+                else // A coroutine is already running
+                {
+                    // If the running coroutine is for a DIFFERENT target than the current score's target
+                    if (determinedTargetCameraPos != _cameraTargetForCoroutine)
+                    {
+                        triggerNewCoroutine = true;
+                    }
+                }
+
+                if (triggerNewCoroutine)
+                {
+                    if (_cameraMovementCoroutine != null)
+                    {
+                        StopCoroutine(_cameraMovementCoroutine);
+                    }
+                    _cameraTargetForCoroutine = determinedTargetCameraPos; 
+                    _cameraMovementCoroutine = StartCoroutine(MoveCameraWithDelayCoroutine(determinedTargetCameraPos, finishTime));
                 }
             }
-            // 如果没有找到当前分数对应的映射，isCameraActuallyMoving 保持 false
         }
 
         // 2. PuzzleGroup Movement Logic
-        // 如果 dragObjects 等于 3, PuzzleGroup 当前没有在移动, 并且摄像机当前也没有在移动，则开始移动 PuzzleGroup
-        if (dragObjects == 3 && !isPuzzleGroupMoving && !isCameraActuallyMoving)
+        // PuzzleGroup should only move if dragObjects == 3, it's not already moving, AND the camera coroutine is NOT active.
+        bool isCameraBusy = _cameraMovementCoroutine != null;
+        if (dragObjects == 3 && !isPuzzleGroupMoving && !isCameraBusy)
         {
-            puzzleGroupInitialPosition = transform.position; // 每次开始移动前，更新初始位置（相对于父物体 cameraPos）
+            puzzleGroupInitialPosition = transform.position; 
             puzzleGroupTargetPosition = transform.position + Vector3.up * moveDistance;
             isPuzzleGroupMoving = true;
             puzzleGroupElapsedTime = 0f;
@@ -122,17 +137,33 @@ public class PuzzleGroup : MonoBehaviour
         // 当score等于totalScore时，触发所有PuzzlePiece的Arrive动画
         if (score == totalScore && !allPiecesArrivedTriggered && totalScore > 0) // 确保totalScore有效
         {
-            Invoke("PlayAnimation", finishTimel);
+            PlayAnimation(); // 直接调用，移除了Invoke和finishTime
             allPiecesArrivedTriggered = true; // 标记已触发，防止重复执行
             Debug.Log("完成了"); 
         }
     }
 
+    IEnumerator MoveCameraWithDelayCoroutine(Vector3 targetPosition, float delay)
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
+
+        // Move the camera to the target position
+        while (Vector3.Distance(cameraPos.position, targetPosition) > 0.01f)
+        {
+            cameraPos.position = Vector3.Lerp(cameraPos.position, targetPosition, Time.deltaTime * cameraMoveSpeed);
+            yield return null; // Wait for the next frame
+        }
+        cameraPos.position = targetPosition; // Ensure it reaches the exact target position
+
+        // Coroutine is finished
+        _cameraMovementCoroutine = null;
+    }
 
     void PlayAnimation()
     {
-         AudioManager.Instance.PlaySound("完成", transform.position); 
-
+       
+        Invoke("FinishBlink", 2.5f);
        
 
         // 新增：播放Timeline动画
@@ -145,29 +176,35 @@ public class PuzzleGroup : MonoBehaviour
             Debug.LogWarning("finishTimeline is not assigned in the Inspector.");
         }
 
-        // 新增：修改摄像机投影大小
-        if (cameraPos != null)
-        {
-            Camera mainCamera = cameraPos.GetComponent<Camera>();
-            if (mainCamera != null && mainCamera.orthographic)
-            {
-                mainCamera.orthographicSize = 13f;
-            }
-            else if (mainCamera != null && !mainCamera.orthographic)
-            {
-                Debug.LogWarning("Camera is not orthographic. Projection size not changed for perspective camera.");
-            }
-            else
-            {
-                Debug.LogWarning("Camera component not found on cameraPos.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("cameraPos is not assigned in the Inspector.");
-        }
+        // // 新增：修改摄像机投影大小
+        // if (cameraPos != null)
+        // {
+        //     Camera mainCamera = cameraPos.GetComponent<Camera>();
+        //     if (mainCamera != null && mainCamera.orthographic)
+        //     {
+        //         mainCamera.orthographicSize = 13f;
+        //     }
+        //     else if (mainCamera != null && !mainCamera.orthographic)
+        //     {
+        //         Debug.LogWarning("Camera is not orthographic. Projection size not changed for perspective camera.");
+        //     }
+        //     else
+        //     {
+        //         Debug.LogWarning("Camera component not found on cameraPos.");
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("cameraPos is not assigned in the Inspector.");
+        // }
 
 
+      
+    }
+
+    void FinishBlink()
+    {
+        AudioManager.Instance.PlaySound("完成", transform.position); 
         PuzzlePiece[] pieces = FindObjectsOfType<PuzzlePiece>();
         foreach (PuzzlePiece piece in pieces)
         {
@@ -175,9 +212,8 @@ public class PuzzleGroup : MonoBehaviour
             print(pieceAnimator.name);
             if (pieceAnimator != null)
             {
-                pieceAnimator.SetTrigger("SelectBlink");
+                pieceAnimator.SetTrigger("Blink");
             }
         }
-
     }
 }

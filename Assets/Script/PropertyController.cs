@@ -1,22 +1,22 @@
 using UnityEngine;
 
 
-[RequireComponent(typeof(SpriteRenderer))]
 [ExecuteInEditMode]
 public class PropertyController : MonoBehaviour
 {
-    public Texture2D BumpMap;
-    [Range(0,1)] public float BumpScale = 1;
-    public Texture2D SpecularMask1;
-    [Range(0, 1)] public float SpecularMaskStrength1 = 1.0f;
+    public Texture2D BaseMap;
+    public Material SharedMaterial;
 
-    // 引用相关组件
-    private SpriteRenderer _renderer;
+    private MeshRenderer _renderer;
     private MaterialPropertyBlock _propBlock;
 
     void Start()
     {
-        _renderer = GetComponent<SpriteRenderer>();
+        _renderer = GetComponent<MeshRenderer>();
+        if (_renderer != null && SharedMaterial != null)
+        {
+            _renderer.sharedMaterial = SharedMaterial;
+        }
         _propBlock = new MaterialPropertyBlock();
     }
 
@@ -24,7 +24,16 @@ public class PropertyController : MonoBehaviour
     {
         if (_renderer == null)
         {
-            _renderer = GetComponent<SpriteRenderer>();
+            _renderer = GetComponent<MeshRenderer>();
+            if (_renderer == null)
+            {
+                return;
+            }
+
+            if (SharedMaterial != null)
+            {
+                _renderer.sharedMaterial = SharedMaterial;
+            }
         }
 
         if (_propBlock == null)
@@ -34,10 +43,12 @@ public class PropertyController : MonoBehaviour
 
         _renderer.GetPropertyBlock(_propBlock);
 
-        _propBlock.SetTexture("_BumpMap", BumpMap);
-        _propBlock.SetFloat("_BumpScale", BumpScale);
-        _propBlock.SetTexture("_SpecularMask1", SpecularMask1);
-        _propBlock.SetFloat("_SpecularMaskStrength1", SpecularMaskStrength1);
+        // Set the BaseMap texture
+        if (BaseMap != null)
+        {
+            _propBlock.SetTexture("_BaseMap", BaseMap);
+        }
+        // Removed other property settings
 
         _renderer.SetPropertyBlock(_propBlock);
     }
