@@ -13,12 +13,6 @@ Shader "NewLit"
 		_Smoothness("_Smoothness", Float) = 0.5
 		[Normal]_BumpMap("_BumpMap", 2D) = "bump" {}
 		_BumpScale("_BumpScale", Float) = 0
-		_OcclusionMap("_OcclusionMap", 2D) = "white" {}
-		_OcclusionStrength("_OcclusionStrength", Float) = 1
-		_CustomHighlightDir("_CustomHighlightDir ", Vector) = (0,0,0,0)
-		_Shininess("_Shininess ", Float) = 0
-		[HDR]_HighlightColor("_HighlightColor ", Color) = (1,1,1,1)
-		_HighlightIntensity("_HighlightIntensity ", Float) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 
@@ -203,7 +197,6 @@ Shader "NewLit"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -263,9 +256,7 @@ Shader "NewLit"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_WORLD_NORMAL
-
+			
 
 			#if defined(ASE_EARLY_Z_DEPTH_OPTIMIZE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -314,16 +305,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -357,7 +342,6 @@ Shader "NewLit"
 			sampler2D _BaseMap;
 			sampler2D _BumpMap;
 			sampler2D _MetallicGlossMap;
-			sampler2D _OcclusionMap;
 
 
 			
@@ -572,27 +556,16 @@ Shader "NewLit"
 				float3 unpack18 = UnpackNormalScale( tex2D( _BumpMap, uv_BumpMap ), _BumpScale );
 				unpack18.z = lerp( 1, unpack18.z, saturate(_BumpScale) );
 				
-				float3 normalizeResult42 = normalize( _CustomHighlightDir );
-				float3 ase_viewVectorWS = ( _WorldSpaceCameraPos.xyz - WorldPosition );
-				float3 ase_viewDirWS = normalize( ase_viewVectorWS );
-				float3 normalizeResult43 = normalize( ase_viewDirWS );
-				float3 normalizeResult46 = normalize( ( normalizeResult42 + normalizeResult43 ) );
-				float3 normalizeResult44 = normalize( WorldNormal );
-				float dotResult47 = dot( normalizeResult46 , normalizeResult44 );
-				float3 CustomSpecular53 = ( pow( saturate( dotResult47 ) , ( _Shininess + 0.1 ) ) * _HighlightColor.rgb * _HighlightIntensity );
-				
 				float2 uv_MetallicGlossMap = input.ase_texcoord9.xy * _MetallicGlossMap_ST.xy + _MetallicGlossMap_ST.zw;
 				
-				float2 uv_OcclusionMap = input.ase_texcoord9.xy * _OcclusionMap_ST.xy + _OcclusionMap_ST.zw;
-				
 
-				float3 BaseColor = ( tex2DNode10.rgb * _BaseColor.rgb );
+				float3 BaseColor = saturate( ( tex2DNode10.rgb * _BaseColor.rgb ) );
 				float3 Normal = unpack18;
-				float3 Emission = saturate( CustomSpecular53 );
+				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = ( tex2D( _MetallicGlossMap, uv_MetallicGlossMap ).rgb * _Metallic ).x;
 				float Smoothness = _Smoothness;
-				float Occlusion = ( _OcclusionStrength * tex2D( _OcclusionMap, uv_OcclusionMap ) ).r;
+				float Occlusion = 1;
 				float Alpha = ( tex2DNode10.a * _BaseColor.a );
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -860,7 +833,6 @@ Shader "NewLit"
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -931,16 +903,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1192,7 +1158,6 @@ Shader "NewLit"
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -1260,16 +1225,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1493,7 +1452,6 @@ Shader "NewLit"
 			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -1522,9 +1480,7 @@ Shader "NewLit"
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 			#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_VERT_NORMAL
-
+			
 
 			struct Attributes
 			{
@@ -1551,7 +1507,6 @@ Shader "NewLit"
 					float4 LightCoord : TEXCOORD3;
 				#endif
 				float4 ase_texcoord4 : TEXCOORD4;
-				float4 ase_texcoord5 : TEXCOORD5;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -1560,16 +1515,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -1611,14 +1560,10 @@ Shader "NewLit"
 				UNITY_TRANSFER_INSTANCE_ID(input, output);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(input.normalOS);
-				output.ase_texcoord5.xyz = ase_worldNormal;
-				
 				output.ase_texcoord4.xy = input.texcoord0.xy;
 				
 				//setting value to unused interpolator channels and avoid initialization warnings
 				output.ase_texcoord4.zw = 0;
-				output.ase_texcoord5.w = 0;
 
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = input.positionOS.xyz;
@@ -1772,19 +1717,9 @@ Shader "NewLit"
 				float2 uv_BaseMap = input.ase_texcoord4.xy * _BaseMap_ST.xy + _BaseMap_ST.zw;
 				float4 tex2DNode10 = tex2D( _BaseMap, uv_BaseMap );
 				
-				float3 normalizeResult42 = normalize( _CustomHighlightDir );
-				float3 ase_viewVectorWS = ( _WorldSpaceCameraPos.xyz - WorldPosition );
-				float3 ase_viewDirWS = normalize( ase_viewVectorWS );
-				float3 normalizeResult43 = normalize( ase_viewDirWS );
-				float3 normalizeResult46 = normalize( ( normalizeResult42 + normalizeResult43 ) );
-				float3 ase_worldNormal = input.ase_texcoord5.xyz;
-				float3 normalizeResult44 = normalize( ase_worldNormal );
-				float dotResult47 = dot( normalizeResult46 , normalizeResult44 );
-				float3 CustomSpecular53 = ( pow( saturate( dotResult47 ) , ( _Shininess + 0.1 ) ) * _HighlightColor.rgb * _HighlightIntensity );
-				
 
-				float3 BaseColor = ( tex2DNode10.rgb * _BaseColor.rgb );
-				float3 Emission = saturate( CustomSpecular53 );
+				float3 BaseColor = saturate( ( tex2DNode10.rgb * _BaseColor.rgb ) );
+				float3 Emission = 0;
 				float Alpha = ( tex2DNode10.a * _BaseColor.a );
 				float AlphaClipThreshold = 0.5;
 
@@ -1823,7 +1758,6 @@ Shader "NewLit"
 			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -1878,16 +1812,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2068,7 +1996,7 @@ Shader "NewLit"
 				float4 tex2DNode10 = tex2D( _BaseMap, uv_BaseMap );
 				
 
-				float3 BaseColor = ( tex2DNode10.rgb * _BaseColor.rgb );
+				float3 BaseColor = saturate( ( tex2DNode10.rgb * _BaseColor.rgb ) );
 				float Alpha = ( tex2DNode10.a * _BaseColor.a );
 				float AlphaClipThreshold = 0.5;
 
@@ -2102,7 +2030,6 @@ Shader "NewLit"
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -2176,16 +2103,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2467,7 +2388,6 @@ Shader "NewLit"
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#pragma multi_compile_fog
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -2524,9 +2444,7 @@ Shader "NewLit"
 				#define ENABLE_TERRAIN_PERPIXEL_NORMAL
 			#endif
 
-			#define ASE_NEEDS_FRAG_WORLD_POSITION
-			#define ASE_NEEDS_FRAG_WORLD_NORMAL
-
+			
 
 			#if defined(ASE_EARLY_Z_DEPTH_OPTIMIZE) && (SHADER_TARGET >= 45)
 				#define ASE_SV_DEPTH SV_DepthLessEqual
@@ -2575,16 +2493,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -2618,7 +2530,6 @@ Shader "NewLit"
 			sampler2D _BaseMap;
 			sampler2D _BumpMap;
 			sampler2D _MetallicGlossMap;
-			sampler2D _OcclusionMap;
 
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
@@ -2828,27 +2739,16 @@ Shader "NewLit"
 				float3 unpack18 = UnpackNormalScale( tex2D( _BumpMap, uv_BumpMap ), _BumpScale );
 				unpack18.z = lerp( 1, unpack18.z, saturate(_BumpScale) );
 				
-				float3 normalizeResult42 = normalize( _CustomHighlightDir );
-				float3 ase_viewVectorWS = ( _WorldSpaceCameraPos.xyz - WorldPosition );
-				float3 ase_viewDirWS = normalize( ase_viewVectorWS );
-				float3 normalizeResult43 = normalize( ase_viewDirWS );
-				float3 normalizeResult46 = normalize( ( normalizeResult42 + normalizeResult43 ) );
-				float3 normalizeResult44 = normalize( WorldNormal );
-				float dotResult47 = dot( normalizeResult46 , normalizeResult44 );
-				float3 CustomSpecular53 = ( pow( saturate( dotResult47 ) , ( _Shininess + 0.1 ) ) * _HighlightColor.rgb * _HighlightIntensity );
-				
 				float2 uv_MetallicGlossMap = input.ase_texcoord9.xy * _MetallicGlossMap_ST.xy + _MetallicGlossMap_ST.zw;
 				
-				float2 uv_OcclusionMap = input.ase_texcoord9.xy * _OcclusionMap_ST.xy + _OcclusionMap_ST.zw;
-				
 
-				float3 BaseColor = ( tex2DNode10.rgb * _BaseColor.rgb );
+				float3 BaseColor = saturate( ( tex2DNode10.rgb * _BaseColor.rgb ) );
 				float3 Normal = unpack18;
-				float3 Emission = saturate( CustomSpecular53 );
+				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = ( tex2D( _MetallicGlossMap, uv_MetallicGlossMap ).rgb * _Metallic ).x;
 				float Smoothness = _Smoothness;
-				float Occlusion = ( _OcclusionStrength * tex2D( _OcclusionMap, uv_OcclusionMap ) ).r;
+				float Occlusion = 1;
 				float Alpha = ( tex2DNode10.a * _BaseColor.a );
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -2978,7 +2878,6 @@ Shader "NewLit"
 			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -3032,16 +2931,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3246,7 +3139,6 @@ Shader "NewLit"
 			#pragma multi_compile_local_fragment _ALPHATEST_ON
 			#define _NORMAL_DROPOFF_TS 1
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -3300,16 +3192,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3515,7 +3401,6 @@ Shader "NewLit"
 			#pragma multi_compile_instancing
 			#pragma multi_compile _ LOD_FADE_CROSSFADE
 			#define ASE_FOG 1
-			#define _EMISSION
 			#define _NORMALMAP 1
 			#define ASE_VERSION 19701
 			#define ASE_SRP_VERSION 170003
@@ -3577,16 +3462,10 @@ Shader "NewLit"
 			float4 _BaseMap_ST;
 			float4 _BaseColor;
 			float4 _BumpMap_ST;
-			float4 _HighlightColor;
 			float4 _MetallicGlossMap_ST;
-			float4 _OcclusionMap_ST;
-			float3 _CustomHighlightDir;
 			float _BumpScale;
-			float _Shininess;
-			float _HighlightIntensity;
 			float _Metallic;
 			float _Smoothness;
-			float _OcclusionStrength;
 			#ifdef ASE_TRANSMISSION
 				float _TransmissionShadow;
 			#endif
@@ -3739,18 +3618,16 @@ Node;AmplifyShaderEditor.SaturateNode;48;1776,-592;Inherit;False;1;0;FLOAT;0;Fal
 Node;AmplifyShaderEditor.DotProductOpNode;47;1648,-576;Inherit;False;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.PowerNode;49;1952,-544;Inherit;False;False;2;0;FLOAT;0;False;1;FLOAT;1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;50;2112,-400;Inherit;False;3;3;0;FLOAT;0;False;1;FLOAT3;0,0,0;False;2;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RegisterLocalVarNode;53;2320,-384;Inherit;False;CustomSpecular;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.RangedFloatNode;27;336,-160;Inherit;False;Property;_BumpScale;_BumpScale;6;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;39;1664,-400;Inherit;False;Property;_Shininess;_Shininess ;12;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;57;1887.427,-397.8145;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;58;1680,-336;Inherit;False;Constant;_Float0;Float 0;14;0;Create;True;0;0;0;False;0;False;0.1;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;59;1847.427,15.18555;Inherit;False;Property;_HighlightIntensity;_HighlightIntensity ;14;0;Create;True;0;0;0;False;0;False;0;0;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;12;96,-352;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SamplerNode;18;576,-192;Inherit;True;Property;_BumpMap;_BumpMap;5;1;[Normal];Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;bump;Auto;True;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
-Node;AmplifyShaderEditor.SaturateNode;56;1072,448;Inherit;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.GetLocalVarNode;54;576,352;Inherit;False;53;CustomSpecular;1;0;OBJECT;;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;60;864,480;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.ColorNode;38;1808,-240;Inherit;False;Property;_HighlightColor;_HighlightColor ;13;1;[HDR];Create;True;0;0;0;False;0;False;1,1,1,1;1,1,1,1;True;True;0;6;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Node;AmplifyShaderEditor.SamplerNode;18;592,-144;Inherit;True;Property;_BumpMap;_BumpMap;5;1;[Normal];Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;bump;Auto;True;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;6;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4;FLOAT3;5
+Node;AmplifyShaderEditor.RegisterLocalVarNode;53;2320,-384;Inherit;False;CustomSpecular;-1;True;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SaturateNode;62;816,-272;Inherit;False;1;0;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;True;1;1;False;;0;False;;0;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;0;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;False;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=ShadowCaster;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;12;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Lit;True;5;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;False;False;True;True;False;False;False;0;False;;False;False;False;False;False;False;False;False;False;True;1;False;;False;False;True;1;LightMode=DepthOnly;False;False;0;;0;0;Standard;0;False;0
@@ -3784,21 +3661,17 @@ WireConnection;49;1;57;0
 WireConnection;50;0;49;0
 WireConnection;50;1;38;5
 WireConnection;50;2;59;0
-WireConnection;53;0;50;0
 WireConnection;57;0;39;0
 WireConnection;57;1;58;0
 WireConnection;12;0;10;5
 WireConnection;12;1;11;5
 WireConnection;18;5;27;0
-WireConnection;56;0;54;0
-WireConnection;60;0;54;0
-WireConnection;60;1;20;0
-WireConnection;1;0;12;0
+WireConnection;53;0;50;0
+WireConnection;62;0;12;0
+WireConnection;1;0;62;0
 WireConnection;1;1;18;0
-WireConnection;1;2;56;0
 WireConnection;1;3;16;0
 WireConnection;1;4;25;0
-WireConnection;1;5;24;0
 WireConnection;1;6;13;0
 ASEEND*/
-//CHKSM=623BB668685EC5DA85D93F681303A666412BB298
+//CHKSM=1E9A8E4482BDEAAC6673104FA7EB284B50992C70

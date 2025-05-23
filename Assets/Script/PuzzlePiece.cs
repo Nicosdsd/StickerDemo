@@ -27,6 +27,9 @@ public class PuzzlePiece : MonoBehaviour
     public float DragScale = 1.2f;
     public float scaleSmoothSpeed = 5.0f; // 新增：缩放过渡速度
 
+    // 新增：成功吸附后要播放动画的Animator
+    public Animator successAnimator;
+
     private Vector3 mouseWorldPosOnDragBegin; // 拖拽开始时鼠标的世界坐标（在拼图块深度）
     private Vector3 pieceWorldPosOnDragBegin; // 拖拽开始时拼图块的世界坐标
     private float mouseConversionZ; // 鼠标屏幕坐标到世界坐标转换时使用的Z深度
@@ -64,6 +67,12 @@ public class PuzzlePiece : MonoBehaviour
 
         transform.position = targetArea.position;
         transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 确保Scale设置为DragScale
+
+        // 新增：为子物体的MeshRenderer添加Light Layer2
+        AddLightLayer2ToChildMeshRenderers();
+        
+        // 新增：播放成功吸附动画
+        PlaySuccessAnimation();
 
         if (animator != null)
         {
@@ -261,10 +270,14 @@ public class PuzzlePiece : MonoBehaviour
         
         if (isSnap)
         {
-            if (animator != null)
-            {
-                animator.SetTrigger("Blink");
-            }
+           //成功吸附
+
+            // 新增：为子物体的MeshRenderer添加Light Layer2
+            AddLightLayer2ToChildMeshRenderers();
+            
+            // 新增：播放成功吸附动画
+            PlaySuccessAnimation();
+
             transform.parent = targetArea; // 移动到这里：只有成功吸附才设置父物体
             // 根据目标点的SpriteRenderer设置当前拼图块的Order in Layer
             SpriteRenderer pieceSpriteRenderer = GetComponent<SpriteRenderer>();
@@ -371,6 +384,60 @@ public class PuzzlePiece : MonoBehaviour
                 //sphereMaskController.GetComponent<Animator>().SetTrigger("Arrive");
             }
         }
+    }
+
+    // 新增：为子物体的MeshRenderer添加Light Layer2
+    private void AddLightLayer2ToChildMeshRenderers()
+    {
+        // 获取所有子物体的MeshRenderer组件
+        MeshRenderer[] childMeshRenderers = GetComponentsInChildren<MeshRenderer>();
+        
+        foreach (MeshRenderer meshRenderer in childMeshRenderers)
+        {
+            // Light Layer2 对应第2位 (从0开始计数)，即 1 << 2 = 4
+            int lightLayer2Mask = 1 << 2;
+            
+            // 将Light Layer2添加到现有的Rendering Layer Mask中
+            meshRenderer.renderingLayerMask |= (uint)lightLayer2Mask;
+
+        }
+    }
+
+    // 新增：为子物体的MeshRenderer移除Light Layer2
+    private void RemoveLightLayer2FromChildMeshRenderers()
+    {
+        // 获取所有子物体的MeshRenderer组件
+        MeshRenderer[] childMeshRenderers = GetComponentsInChildren<MeshRenderer>();
+        
+        foreach (MeshRenderer meshRenderer in childMeshRenderers)
+        {
+            // Light Layer2 对应第2位 (从0开始计数)，即 1 << 2 = 4
+            int lightLayer2Mask = 1 << 2;
+            
+            // 从现有的Rendering Layer Mask中移除Light Layer2
+            meshRenderer.renderingLayerMask &= ~(uint)lightLayer2Mask;
+        }
+    }
+
+    // 新增：播放成功吸附动画
+    private void PlaySuccessAnimation()
+    {
+        if (successAnimator != null)
+        {
+            
+             successAnimator.SetTrigger("LightBlink");   
+             
+             // 启动协程，0.5秒后移除Light Layer2
+             StartCoroutine(RemoveLightLayerAfterDelay(1f));
+        }
+       
+    }
+
+    // 新增：协程，延迟指定时间后移除Light Layer2
+    private IEnumerator RemoveLightLayerAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        RemoveLightLayer2FromChildMeshRenderers();
     }
 
     // 刷新目标区域Sprite的可见性
