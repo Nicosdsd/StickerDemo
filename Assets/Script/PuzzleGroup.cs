@@ -40,6 +40,8 @@ public class PuzzleGroup : MonoBehaviour
     private Coroutine _cameraMovementCoroutine;
     private Vector3 _cameraTargetForCoroutine = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue); // 初始化一个不会匹配任何实际位置的值
 
+    public Transform TargetList;
+
     void Start()
     {
         // 初始化目标位置为当前对象位置
@@ -208,12 +210,9 @@ public class PuzzleGroup : MonoBehaviour
         PuzzlePiece[] pieces = FindObjectsOfType<PuzzlePiece>();
         foreach (PuzzlePiece piece in pieces)
         {
-            Animator pieceAnimator = piece.GetComponent<Animator>();
-            print(pieceAnimator.name);
-            if (pieceAnimator != null)
-            {
-                pieceAnimator.SetTrigger("Blink");
-            }
+            piece. PlaySuccessAnimation();
+               
         }
+        print("完成");
     }
 }

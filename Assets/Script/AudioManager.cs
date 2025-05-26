@@ -4,13 +4,14 @@ using System.Collections.Generic;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
+    public float masterVolume = 1f; // 总音量控制
 
     [System.Serializable]
     public class Sound
     {
         public string name;                // 音效名称
         public AudioClip clip;             // 音效资源
-        [Range(0f, 1f)]
+        [Range(0f, 5f)]
         public float volume = 1f;          // 默认音量
         [Range(0f, 10f)]
         public float minInterval;     // 最小播放间隔（秒）
@@ -67,7 +68,7 @@ public class AudioManager : MonoBehaviour
 
                 AudioSource audioSource = tempAudioSourceObj.AddComponent<AudioSource>();
                 audioSource.clip = sound.clip;
-                audioSource.volume = sound.volume;
+                audioSource.volume = sound.volume * masterVolume; // 应用总音量
 
                 if (sound.enableSpatialSound)
                 {
@@ -97,6 +98,11 @@ public class AudioManager : MonoBehaviour
         {
             Debug.LogWarning("Sound not found: " + name);
         }
+    }
+
+    public void SetMasterVolume(float volume)
+    {
+        masterVolume = Mathf.Clamp01(volume);
     }
 
     public void SetVolume(string name, float volume)

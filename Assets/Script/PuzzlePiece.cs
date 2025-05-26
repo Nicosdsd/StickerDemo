@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
 using Lattice;
+using HighlightPlus;
 
 public class PuzzlePiece : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class PuzzlePiece : MonoBehaviour
     private Vector3 pieceWorldPosOnDragBegin; // 拖拽开始时拼图块的世界坐标
     private float mouseConversionZ; // 鼠标屏幕坐标到世界坐标转换时使用的Z深度
 
-    private SpriteRenderer _targetAreaSprite; // 目标区域的SpriteRenderer组件，用于控制显隐
+
     public bool isLocked = false; // 新增：标记拼图块是否已锁定
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
     private float _currentApplyingOffsetY = 0f; // 新增：用于平滑处理offsetOnClick的当前Y偏移值
@@ -69,22 +70,15 @@ public class PuzzlePiece : MonoBehaviour
         transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 确保Scale设置为DragScale
 
         // 新增：为子物体的MeshRenderer添加Light Layer2
-        AddLightLayer2ToChildMeshRenderers();
+        //AddLightLayer2ToChildMeshRenderers();
         
         // 新增：播放成功吸附动画
         PlaySuccessAnimation();
 
-        if (animator != null)
-        {
-            animator.SetTrigger("SelectBlink"); // 触发完成动画
-        }
+
+
         transform.parent = targetArea; // 设置父对象
 
-        SpriteRenderer pieceSpriteRenderer = GetComponent<SpriteRenderer>();
-        if (pieceSpriteRenderer != null && _targetAreaSprite != null)
-        {
-            pieceSpriteRenderer.sortingOrder = _targetAreaSprite.sortingOrder + 1; // 更新渲染顺序
-        }
 
         PuzzleGroup puzzleGroupScript = FindObjectOfType<PuzzleGroup>();
         if (puzzleGroupScript != null)
@@ -102,17 +96,11 @@ public class PuzzlePiece : MonoBehaviour
         isLocked = true; // 标记为已锁定
         _isDragging = false; // 确保拖拽状态也关闭
 
-        // if (_targetAreaSprite != null)
-        // {
-        //     _targetAreaSprite.enabled = false; // 隐藏目标区域提示
-        // }
-
+       
         // 播放完成音效
         AudioManager.Instance.PlaySound("放下", transform.position); // 使用"放下"音效或一个专门的"完成"音效
 
-        // 可以选择禁用脚本或Collider，但仅设置isLocked通常已足够阻止交互
-        // this.enabled = false;
-        // GetComponent<Collider>().enabled = false;
+
 
         // 新增：成功放下后显示LatticeModifier组件
         if (_latticeModifier != null)
@@ -127,10 +115,7 @@ public class PuzzlePiece : MonoBehaviour
         _startPosition = transform.position;
         transform.localScale = new Vector3(StartScale, StartScale, StartScale); // 设置初始Scale
         animator = GetComponent<Animator>();
-        if (targetArea != null)
-        {
-            _targetAreaSprite = targetArea.GetComponent<SpriteRenderer>();
-        }
+       
 
         // 新增：获取LatticeModifier组件并默认隐藏
         _latticeModifier = GetComponentInChildren<LatticeModifier>(true); // true表示也查找非激活的子对象
@@ -140,13 +125,16 @@ public class PuzzlePiece : MonoBehaviour
         }
 
         dragCenter = FindObjectOfType<DragCenter>();
-        //RefreshTargetSpriteVisibility(); // 设置初始可见性
+
     }
 
     // 每帧更新
     void Update()
     {
-        // RefreshTargetSpriteVisibility(); // 持续更新可见性 // 已被移出
+
+        TargetVisibility();
+      
+
     }
 
     // 新增：固定更新，用于物理相关的更新，比如拖拽
@@ -175,7 +163,7 @@ public class PuzzlePiece : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, targetDragPosition, Time.fixedDeltaTime * dragSmoothSpeed);
             //直接移动
             // transform.position = new Vector3(targetBaseX, targetBaseY + additionalUpwardOffset, targetBaseZ); 
-            RefreshTargetSpriteVisibility(); // 拖拽时也需要刷新，确保吸附提示正确显示
+
         }
     }
 
@@ -210,10 +198,11 @@ public class PuzzlePiece : MonoBehaviour
 
         // transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 设置拖拽时的Scale -> 改为协程
         StartCoroutine(ChangeScaleOverTime(new Vector3(DragScale, DragScale, DragScale), scaleSmoothSpeed));
-        RefreshTargetSpriteVisibility(); // 开始拖拽时刷新
+
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
-        GetComponent<Collider>().enabled = false;
+        //GetComponent<Collider>().enabled = false;
+        //GetComponent<HighlightEffect>().enabled = true;
         //dragCenter.enabled = false;
 
     }
@@ -223,12 +212,13 @@ public class PuzzlePiece : MonoBehaviour
     {
 
         //dragCenter.enabled = true;
+
+        //GetComponent<HighlightEffect>().enabled = false;
        
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
             return;
         }
-        RefreshTargetSpriteVisibility(); // 拖拽结束时刷新
 
         _isDragging = false;
 
@@ -268,11 +258,14 @@ public class PuzzlePiece : MonoBehaviour
         }
 
         transform.position = targetPosition;
+
+        
         // transform.localScale = new Vector3(StartScale, StartScale, StartScale); // 协程结束，恢复Scale -> 移到 else 分支
         
         if (isSnap)
         {
            //成功吸附
+           print("成功吸附");
 
             // 新增：为子物体的MeshRenderer添加Light Layer2
             AddLightLayer2ToChildMeshRenderers();
@@ -282,15 +275,7 @@ public class PuzzlePiece : MonoBehaviour
 
             transform.parent = targetArea; // 移动到这里：只有成功吸附才设置父物体
             // 根据目标点的SpriteRenderer设置当前拼图块的Order in Layer
-            SpriteRenderer pieceSpriteRenderer = GetComponent<SpriteRenderer>();
-            if (pieceSpriteRenderer != null)
-            {
-                if (_targetAreaSprite != null)
-                {
-                    pieceSpriteRenderer.sortingOrder = _targetAreaSprite.sortingOrder + 1;
-                }
-               
-            }
+          
 
             // 新增逻辑：寻找 PuzzleGroup 实例并更新计数，然后禁用当前拼图
             PuzzleGroup puzzleGroupScript = FindObjectOfType<PuzzleGroup>();
@@ -424,8 +409,9 @@ public class PuzzlePiece : MonoBehaviour
     }
 
     // 新增：播放成功吸附动画
-    private void PlaySuccessAnimation()
+    public void PlaySuccessAnimation()
     {
+         AddLightLayer2ToChildMeshRenderers();
         if (successAnimator != null)
         {
             
@@ -444,24 +430,21 @@ public class PuzzlePiece : MonoBehaviour
         RemoveLightLayer2FromChildMeshRenderers();
     }
 
-    // 刷新目标区域Sprite的可见性
-    private void RefreshTargetSpriteVisibility()
+    // 
+    private void TargetVisibility()
     {
-        if (targetArea != null && _targetAreaSprite != null)
-        {
-            // 判断当前物体是否在目标区域的吸附范围内
-            bool isInRange = Vector3.Distance(transform.position, targetArea.position) <= snapDistance;
+      
+         // 判断当前物体是否在目标区域的吸附范围内
+        bool isInRange = Vector3.Distance(transform.position, targetArea.position) <= snapDistance;
 
-            // 仅当拖拽时或者拼图块未锁定时，才根据距离显示目标区域
-            // 如果拼图块已锁定，则不应该再显示其目标区域，即使它在范围内（比如父物体移动导致）
-            if ((_isDragging || !isLocked) && isInRange)
-            {
-                _targetAreaSprite.enabled = true;
-            }
-            else
-            {
-                _targetAreaSprite.enabled = false;
-            }
+        if (isInRange && !isLocked && _isDragging)
+        {
+            print("在范围内");
+            targetArea.GetComponent<HighlightEffect>().enabled = true;
+        }
+        else
+        {
+            targetArea.GetComponent<HighlightEffect>().enabled = false;
         }
     }
 
