@@ -442,7 +442,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -1810,7 +1810,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -2402,7 +2402,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -2569,7 +2569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2578,7 +2578,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 45
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -2707,7 +2707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ac45a6f24d7c49418bd4de4f0284042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  masterVolume: 2
+  masterVolume: 1
   sounds:
   - name: "\u6293\u8D77"
     clip: {fileID: 8300000, guid: f3481a1bc06fdd04da93c7a950a80449, type: 3}
@@ -2741,9 +2741,9 @@ MonoBehaviour:
     maxDistance: 0
     minDistance: 0
     lastPlayedTime: 0
-  - name: "\u6324\u538B"
-    clip: {fileID: 8300000, guid: cc5b3d9a311ca7f4db37afcde8dfd5e2, type: 3}
-    volume: 0
+  - name: "\u6309\u538B"
+    clip: {fileID: 8300000, guid: 076ae2f0e2653af4cb19045bcfdd6220, type: 3}
+    volume: 0.8
     minInterval: 0
     enableSpatialSound: 0
     maxDistance: 0
@@ -2777,7 +2777,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: e1e623e542f7f07459df20f32da38a25, type: 3}
   m_Resource: {fileID: 8300000, guid: e1e623e542f7f07459df20f32da38a25, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.6
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3173,7 +3173,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -3892,7 +3892,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -4137,7 +4137,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: ecb9bf8553d165747b16f2f457df65e0, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4146,7 +4146,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 1.5
 --- !u!222 &383689721
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4862,7 +4862,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -5608,7 +5608,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -7228,7 +7228,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: ecb9bf8553d165747b16f2f457df65e0, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7237,7 +7237,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 1.5
 --- !u!222 &843643963
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7258,6 +7258,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a850e95508248a46adec5bcfb213218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &865828368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 865828369}
+  - component: {fileID: 865828371}
+  - component: {fileID: 865828370}
+  - component: {fileID: 865828372}
+  m_Layer: 5
+  m_Name: "\u9F20\u6807"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &865828369
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865828368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1686529909}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -124.59, y: 16.59}
+  m_SizeDelta: {x: 245.3311, y: 245.3311}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &865828370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865828368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b15c4772bebb63a4284f22d220cdb16d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &865828371
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865828368}
+  m_CullTransparentMesh: 1
+--- !u!114 &865828372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865828368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6a7913404d8d549b2b0dd20d62a8ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pressedSprite: {fileID: 21300000, guid: be3a3b7ef3f3ab842b2ec312546ba80e, type: 3}
 --- !u!1 &869938891
 GameObject:
   m_ObjectHideFlags: 0
@@ -7534,7 +7623,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -8201,7 +8290,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -9049,7 +9138,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -9282,7 +9371,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -10109,7 +10198,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -10444,7 +10533,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -10954,6 +11043,7 @@ RectTransform:
   - {fileID: 383689717}
   - {fileID: 670737338}
   - {fileID: 764222434}
+  - {fileID: 865828369}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11630,7 +11720,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -11747,7 +11837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11756,7 +11846,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 45
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -12088,7 +12178,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -12321,7 +12411,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -13008,7 +13098,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -13757,7 +13847,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -14192,7 +14282,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -14425,7 +14515,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0
@@ -14779,7 +14869,7 @@ MonoBehaviour:
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
   glowMaskMode: 0
-  innerGlow: 2
+  innerGlow: 1
   innerGlowWidth: 2
   innerGlowColor: {r: 0.121693134, g: 1, b: 0, a: 1}
   innerGlowBlendMode: 0

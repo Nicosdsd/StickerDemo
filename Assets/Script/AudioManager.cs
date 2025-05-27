@@ -100,6 +100,69 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 播放循环音效，并返回创建的 AudioSource
+    /// </summary>
+    /// <param name="name">音效名称</param>
+    /// <param name="position">世界坐标位置（仅在立体声模式下生效）</param>
+    /// <returns>创建的 AudioSource，如果音效未找到或无法播放则返回 null</returns>
+    public AudioSource PlayLoopingSound(string name, Vector3 position)
+    {
+        if (soundDictionary.TryGetValue(name, out Sound sound))
+        {
+            // 检查是否满足最小播放间隔 (对于循环音效，通常第一次播放时检查)
+            // 如果不希望循环音效受最小间隔限制，可以移除或调整此逻辑
+            float currentTime = Time.time;
+            if (currentTime - sound.lastPlayedTime < sound.minInterval)
+            {
+                Debug.Log($"Looping sound '{name}' start skipped due to min interval. Playing immediately.");
+                // 或者选择不跳过，直接播放
+            }
+
+            GameObject tempAudioSourceObj = new GameObject("LoopingAudioSource_" + name);
+            tempAudioSourceObj.transform.position = position;
+
+            AudioSource audioSource = tempAudioSourceObj.AddComponent<AudioSource>();
+            audioSource.clip = sound.clip;
+            audioSource.volume = sound.volume * masterVolume;
+            audioSource.loop = true; // 设置为循环播放
+
+            if (sound.enableSpatialSound)
+            {
+                audioSource.spatialBlend = 1f;
+                audioSource.minDistance = sound.minDistance;
+                audioSource.maxDistance = sound.maxDistance;
+                audioSource.rolloffMode = AudioRolloffMode.Linear;
+            }
+            else
+            {
+                audioSource.spatialBlend = 0f;
+            }
+
+            audioSource.Play();
+            sound.lastPlayedTime = currentTime; // 更新上次播放时间（主要影响非循环音效的间隔）
+            return audioSource;
+        }
+        else
+        {
+            Debug.LogWarning("Looping sound not found: " + name);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 停止指定的 AudioSource 播放并销毁其 GameObject
+    /// </summary>
+    /// <param name="audioSourceToStop">要停止的 AudioSource</param>
+    public void StopLoopingSound(AudioSource audioSourceToStop)
+    {
+        if (audioSourceToStop != null)
+        {
+            audioSourceToStop.Stop();
+            Destroy(audioSourceToStop.gameObject);
+        }
+    }
+
     public void SetMasterVolume(float volume)
     {
         masterVolume = Mathf.Clamp01(volume);
@@ -134,6 +197,11 @@ public class AudioManager : MonoBehaviour
     {
         /*Time.timeScale = 1;
         Instance.PlaySound(soundName,transform.position);*/
-
+        // 考虑是否需要为UI声音提供一个专用的非循环播放方法，
+        // 或者 PlaySound 已经满足需求。
+        // 如果是循环的背景UI音，可以使用PlayLoopingSound
+        // 如果是点击等一次性音效，PlaySound更合适
+        // 此处暂时保留注释，根据具体需求决定如何实现SetUISound
+        PlaySound(soundName, Camera.main != null ? Camera.main.transform.position : Vector3.zero); // 播放UI音效，位置可以设为摄像机位置或者(0,0,0)
     }
 }

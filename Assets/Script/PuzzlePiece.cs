@@ -42,6 +42,8 @@ public class PuzzlePiece : MonoBehaviour
     private DragCenter dragCenter;
     private LatticeModifier _latticeModifier; // 新增：LatticeModifier组件的引用
 
+    private AudioSource currentLoopingSound; // 当前正在播放的循环音效
+
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked
     {
@@ -175,7 +177,17 @@ public class PuzzlePiece : MonoBehaviour
 
         if (isLocked) // 新增：如果已锁定，则不允许拖动
         {
-            AudioManager.Instance.PlaySound("挤压",transform.position);   
+            //AudioManager.Instance.PlaySound("按压",transform.position);
+             // 播放循环音效
+            if (AudioManager.Instance != null && !string.IsNullOrEmpty("按压"))
+            {
+                if (currentLoopingSound != null) // 如果已有音效在播放，先停止
+                {
+                    AudioManager.Instance.StopLoopingSound(currentLoopingSound);
+                }
+                currentLoopingSound = AudioManager.Instance.PlayLoopingSound("按压", transform.position); 
+            }
+
             return;
         }
 
@@ -210,6 +222,13 @@ public class PuzzlePiece : MonoBehaviour
     // 鼠标抬起时触发
     void OnMouseUp()
     {
+
+        // 停止循环音效
+        if (currentLoopingSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopLoopingSound(currentLoopingSound);
+            currentLoopingSound = null;
+        }
 
         //dragCenter.enabled = true;
 
