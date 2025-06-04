@@ -2680,6 +2680,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1631959918}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -3940,6 +3944,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 190502413}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -4104,6 +4112,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 592774803}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -4538,6 +4550,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 2139367167}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -4957,6 +4973,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1366095727}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -5287,6 +5307,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1476971398}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -5361,6 +5385,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1739513951}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4967387362836546867, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -5906,6 +5934,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1313913368}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
@@ -7344,6 +7376,10 @@ PrefabInstance:
       propertyPath: targetArea
       value: 
       objectReference: {fileID: 1943837389}
+    - target: {fileID: 1307928550524972914, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
+      propertyPath: offsetOnClick
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2936046911576995759, guid: 04d0f1bb79e580741a0b88a61d2e50aa, type: 3}
       propertyPath: BaseMap
       value: 
