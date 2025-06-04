@@ -2742,8 +2742,8 @@ MonoBehaviour:
     minDistance: 0
     lastPlayedTime: 0
   - name: "\u6309\u538B"
-    clip: {fileID: 8300000, guid: 076ae2f0e2653af4cb19045bcfdd6220, type: 3}
-    volume: 0.8
+    clip: {fileID: 8300000, guid: 9e2e4a1c00ad03b43816eeb49523e8d4, type: 3}
+    volume: 1
     minInterval: 0
     enableSpatialSound: 0
     maxDistance: 0
@@ -15116,8 +15116,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15179,8 +15179,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15284,8 +15284,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15405,8 +15405,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15586,8 +15586,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15684,8 +15684,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15949,8 +15949,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -15992,8 +15992,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16019,8 +16019,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16064,8 +16064,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16215,8 +16215,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16258,8 +16258,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16306,8 +16306,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16333,8 +16333,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16454,8 +16454,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16481,8 +16481,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16508,8 +16508,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16535,8 +16535,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16730,8 +16730,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16757,8 +16757,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20
@@ -16834,8 +16834,8 @@ MonoBehaviour:
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
-  offsetOnClick: 2
-  dragFactor: 1
+  offsetOnClick: 1
+  dragFactor: 0.2
   StartScale: 0.8
   DragScale: 1.5
   scaleSmoothSpeed: 20

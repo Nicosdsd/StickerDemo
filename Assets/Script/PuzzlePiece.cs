@@ -134,9 +134,8 @@ public class PuzzlePiece : MonoBehaviour
     void Update()
     {
 
-        TargetVisibility();
+        //TargetVisibility();
       
-
     }
 
     // 新增：固定更新，用于物理相关的更新，比如拖拽
@@ -179,14 +178,14 @@ public class PuzzlePiece : MonoBehaviour
         {
             //AudioManager.Instance.PlaySound("按压",transform.position);
              // 播放循环音效
-            if (AudioManager.Instance != null && !string.IsNullOrEmpty("按压"))
-            {
-                if (currentLoopingSound != null) // 如果已有音效在播放，先停止
-                {
-                    AudioManager.Instance.StopLoopingSound(currentLoopingSound);
-                }
-                currentLoopingSound = AudioManager.Instance.PlayLoopingSound("按压", transform.position); 
-            }
+            // if (AudioManager.Instance != null && !string.IsNullOrEmpty("按压"))
+            // {
+            //     if (currentLoopingSound != null) // 如果已有音效在播放，先停止
+            //     {
+            //         AudioManager.Instance.StopLoopingSound(currentLoopingSound);
+            //     }
+            //     currentLoopingSound = AudioManager.Instance.PlayLoopingSound("按压", transform.position); 
+            // }
 
             return;
         }
@@ -224,11 +223,11 @@ public class PuzzlePiece : MonoBehaviour
     {
 
         // 停止循环音效
-        if (currentLoopingSound != null && AudioManager.Instance != null)
-        {
-            AudioManager.Instance.StopLoopingSound(currentLoopingSound);
-            currentLoopingSound = null;
-        }
+        // if (currentLoopingSound != null && AudioManager.Instance != null)
+        // {
+        //     AudioManager.Instance.StopLoopingSound(currentLoopingSound);
+        //     currentLoopingSound = null;
+        // }
 
         //dragCenter.enabled = true;
 
@@ -320,7 +319,10 @@ public class PuzzlePiece : MonoBehaviour
 
             GetComponent<Collider>().enabled = true;
 
-            _latticeModifier.enabled = true;
+            FindObjectOfType<PuzzleGroup2>().currentCount++;
+            FindObjectOfType<PuzzleGroup2>().currentScore += 1;
+
+            //_latticeModifier.enabled = true;
            
         }
 
@@ -433,8 +435,8 @@ public class PuzzlePiece : MonoBehaviour
          AddLightLayer2ToChildMeshRenderers();
         if (successAnimator != null)
         {
-            
-             successAnimator.SetTrigger("LightBlink");   
+            print("播放成功动画");
+            successAnimator.SetTrigger("Success");
              
              // 启动协程，0.5秒后移除Light Layer2
              StartCoroutine(RemoveLightLayerAfterDelay(1f));
@@ -450,22 +452,22 @@ public class PuzzlePiece : MonoBehaviour
     }
 
     // 
-    private void TargetVisibility()
-    {
+    // private void TargetVisibility()
+    // {
       
-         // 判断当前物体是否在目标区域的吸附范围内
-        bool isInRange = Vector3.Distance(transform.position, targetArea.position) <= snapDistance;
+    //      // 判断当前物体是否在目标区域的吸附范围内
+    //     bool isInRange = Vector3.Distance(transform.position, targetArea.position) <= snapDistance;
 
-        if (isInRange && !isLocked && _isDragging)
-        {
-            print("在范围内");
-            targetArea.GetComponent<HighlightEffect>().enabled = true;
-        }
-        else
-        {
-            targetArea.GetComponent<HighlightEffect>().enabled = false;
-        }
-    }
+    //     if (isInRange && !isLocked && _isDragging)
+    //     {
+    //         print("在范围内");
+    //        // targetArea.GetComponent<HighlightEffect>().enabled = true;
+    //     }
+    //     else
+    //     {
+    //         //targetArea.GetComponent<HighlightEffect>().enabled = false;
+    //     }
+    // }
 
     // 在编辑器中绘制辅助线，方便调试
     private void OnDrawGizmosSelected()
