@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2763898809993651860
 Transform:
   m_ObjectHideFlags: 0
@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4023611492049548159}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -170,7 +170,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e366c81d0a6b8294fbdabd031d5c226b, type: 2}
+  - {fileID: 2100000, guid: 5da4306ab9e40c94f86dec32e6f04f31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseMap: {fileID: 2800000, guid: d3fbf8f188a16cd49bfa533e2889b66d, type: 3}
-  SharedMaterial: {fileID: 2100000, guid: e366c81d0a6b8294fbdabd031d5c226b, type: 2}
+  SharedMaterial: {fileID: 2100000, guid: 5da4306ab9e40c94f86dec32e6f04f31, type: 2}
 --- !u!65 &1116821569193075362
 BoxCollider:
   m_ObjectHideFlags: 0

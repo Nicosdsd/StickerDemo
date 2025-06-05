@@ -38,11 +38,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaThreshold: 0.5
-    - _FlowOffset: 0
+    - _FlowIntensity: 0.094
+    - _FlowOffset: 0.157
     - _FlowSpeed: 1
-    - _OutlineThickness: 4
+    - _FlowStrength: 0
+    - _Glossiness: 0.5
+    - _NeighborAlphaThreshold: 0.189
+    - _OutlineIntensity: 0
+    - _OutlineStrength: 0
+    - _OutlineThickness: 3
     m_Colors:
-    - _FlowColor: {r: 0, g: 3.3124712, b: 5.9921565, a: 1}
-    - _OutlineColor: {r: 1.3406659, g: 6.422234, b: 0, a: 1}
+    - _FlowColor: {r: 11.984315, g: 11.970181, b: 11.927785, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

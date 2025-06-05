@@ -30,9 +30,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _ShineAngle: 145
-    - _ShineLocation: 1.5
+    - _ShineLocation: -1
     - _ShineWidth: 1
     m_Colors:
-    - _ShineColor: {r: 0, g: 3.3254902, b: 5.9921575, a: 1}
+    - _ShineColor: {r: 11.984313, g: 11.984313, b: 11.984313, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
