@@ -210,7 +210,7 @@ Shader "Unlit/OutlineFlowURP" // Renamed to indicate URP compatibility
             real4 frag(v2f i) : SV_Target
             {
                 half4 col = tex2D(_BaseMap, i.uv);
-                clip(col.a - 0.001);
+                clip(col.a - 0.5f);
                 return 0;
             }
             ENDHLSL

@@ -2,6 +2,13 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
+public enum EdgeMode
+{
+    Jigsaw,
+    AllTabs,
+    AllFlat
+}
+
 public class ImageSlicer : EditorWindow
 {
     private Texture2D sourceTexture;
@@ -9,6 +16,7 @@ public class ImageSlicer : EditorWindow
     private int columns = 4;
     private float tabSizeRatio = 0.25f;
     private string outputDir = "Assets/SlicedImages";
+    private EdgeMode edgeMode = EdgeMode.Jigsaw;
 
     [MenuItem("Tools/Image Slicer")]
     public static void ShowWindow()
@@ -25,6 +33,7 @@ public class ImageSlicer : EditorWindow
         columns = EditorGUILayout.IntField("列数", columns);
         tabSizeRatio = EditorGUILayout.Slider("拼图块尺寸比例", tabSizeRatio, 0.1f, 0.4f);
         outputDir = EditorGUILayout.TextField("输出目录", outputDir);
+        edgeMode = (EdgeMode)EditorGUILayout.EnumPopup("边缘模式", edgeMode);
 
         if (GUILayout.Button("开始切割"))
         {
@@ -59,10 +68,13 @@ public class ImageSlicer : EditorWindow
         int sliceWidth = sourceTexture.width / columns;
         int sliceHeight = sourceTexture.height / rows;
 
-        float baseRadius = Mathf.Min(sliceWidth, sliceHeight) * tabSizeRatio;
-        float tabHalfWidth = baseRadius;
-        float tabProtrusion = baseRadius * 1.5f;
-        int padding = Mathf.CeilToInt(tabProtrusion);
+        float tabRadius = Mathf.Min(sliceWidth, sliceHeight) * tabSizeRatio;
+        int padding = Mathf.CeilToInt(tabRadius);
+
+        if (edgeMode == EdgeMode.AllFlat)
+        {
+            padding = 0;
+        }
 
         if (!Directory.Exists(outputDir))
         {
@@ -74,6 +86,8 @@ public class ImageSlicer : EditorWindow
         int sourceWidth = sourceTexture.width;
         int sourceHeight = sourceTexture.height;
 
+        var outputPaths = new System.Collections.Generic.List<string>();
+
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < columns; c++)
@@ -84,10 +98,20 @@ public class ImageSlicer : EditorWindow
                 int GetHJointShape(int r_val, int c_val) => (r_val + c_val) % 2 == 0 ? 1 : -1;
                 int GetVJointShape(int r_val, int c_val) => (r_val + c_val + 1) % 2 == 0 ? 1 : -1;
 
-                if (c < columns - 1) rightTab = GetHJointShape(r, c);
-                if (c > 0) leftTab = -GetHJointShape(r, c - 1);
-                if (r < rows - 1) bottomTab = GetVJointShape(r, c);
-                if (r > 0) topTab = -GetVJointShape(r - 1, c);
+                if (edgeMode == EdgeMode.Jigsaw)
+                {
+                    if (c < columns - 1) rightTab = GetHJointShape(r, c);
+                    if (c > 0) leftTab = -GetHJointShape(r, c - 1);
+                    if (r < rows - 1) bottomTab = GetVJointShape(r, c);
+                    if (r > 0) topTab = -GetVJointShape(r - 1, c);
+                }
+                else if (edgeMode == EdgeMode.AllTabs)
+                {
+                    rightTab = GetHJointShape(r, c);
+                    leftTab = -GetHJointShape(r, c - 1);
+                    bottomTab = GetVJointShape(r, c);
+                    topTab = -GetVJointShape(r - 1, c);
+                }
 
                 int pieceTexWidth = sliceWidth + 2 * padding;
                 int pieceTexHeight = sliceHeight + 2 * padding;
@@ -102,7 +126,7 @@ public class ImageSlicer : EditorWindow
                         float rx = x - padding;
                         float ry = y - padding;
 
-                        if (IsInsidePuzzleShape(rx, ry, sliceWidth, sliceHeight, tabHalfWidth, tabProtrusion, topTab, rightTab, bottomTab, leftTab))
+                        if (IsInsidePuzzleShape(rx, ry, sliceWidth, sliceHeight, tabRadius, topTab, rightTab, bottomTab, leftTab))
                         {
                             int sx = c * sliceWidth + Mathf.RoundToInt(rx);
                             int sy = (rows - 1 - r) * sliceHeight + Mathf.RoundToInt(ry);
@@ -125,6 +149,7 @@ public class ImageSlicer : EditorWindow
                 byte[] bytes = slicedTexture.EncodeToPNG();
                 string outputPath = Path.Combine(outputDir, $"{sourceTexture.name}_{r}_{c}.png");
                 File.WriteAllBytes(outputPath, bytes);
+                outputPaths.Add(outputPath);
                 
                 if (Application.isEditor)
                 {
@@ -137,49 +162,69 @@ public class ImageSlicer : EditorWindow
             }
         }
 
+        AssetDatabase.Refresh();
+
+        AssetDatabase.StartAssetEditing();
+        try
+        {
+            foreach (var outputPath in outputPaths)
+            {
+                var importer = AssetImporter.GetAtPath(outputPath) as TextureImporter;
+                if (importer != null)
+                {
+                    importer.textureType = TextureImporterType.Sprite;
+                    importer.spriteImportMode = SpriteImportMode.Single;
+                    importer.SaveAndReimport();
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
         if (!wasReadable)
         {
             textureImporter.isReadable = false;
             AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         }
 
-        AssetDatabase.Refresh();
         Debug.Log("图片切割成功！");
     }
 
-    private bool IsInsidePuzzleShape(float rx, float ry, int sliceWidth, int sliceHeight, float tabHalfWidth, float tabProtrusion, int topTab, int rightTab, int bottomTab, int leftTab)
+    private bool IsInsidePuzzleShape(float rx, float ry, int sliceWidth, int sliceHeight, float tabRadius, int topTab, int rightTab, int bottomTab, int leftTab)
     {
         bool in_main_rect = (rx >= 0 && rx < sliceWidth && ry >= 0 && ry < sliceHeight);
 
         float tabCenterX = sliceWidth / 2f;
         float tabCenterY = sliceHeight / 2f;
 
-        if (topTab == -1 && Mathf.Abs(rx - tabCenterX) < tabHalfWidth) {
-            if (Mathf.Pow((rx - tabCenterX) / tabHalfWidth, 2) + Mathf.Pow((ry - (sliceHeight - 1)) / tabProtrusion, 2) <= 1) return false;
+        if (topTab == -1 && Mathf.Abs(rx - tabCenterX) < tabRadius) {
+            if (Mathf.Pow((rx - tabCenterX) / tabRadius, 2) + Mathf.Pow((ry - (sliceHeight - 1)) / tabRadius, 2) <= 1) return false;
         }
-        if (bottomTab == -1 && Mathf.Abs(rx - tabCenterX) < tabHalfWidth) {
-            if (Mathf.Pow(ry / tabProtrusion, 2) + Mathf.Pow((rx - tabCenterX) / tabHalfWidth, 2) <= 1) return false;
+        if (bottomTab == -1 && Mathf.Abs(rx - tabCenterX) < tabRadius) {
+            if (Mathf.Pow(ry / tabRadius, 2) + Mathf.Pow((rx - tabCenterX) / tabRadius, 2) <= 1) return false;
         }
-        if (rightTab == -1 && Mathf.Abs(ry - tabCenterY) < tabHalfWidth) {
-            if (Mathf.Pow((rx - (sliceWidth - 1)) / tabProtrusion, 2) + Mathf.Pow((ry - tabCenterY) / tabHalfWidth, 2) <= 1) return false;
+        if (rightTab == -1 && Mathf.Abs(ry - tabCenterY) < tabRadius) {
+            if (Mathf.Pow((rx - (sliceWidth - 1)) / tabRadius, 2) + Mathf.Pow((ry - tabCenterY) / tabRadius, 2) <= 1) return false;
         }
-        if (leftTab == -1 && Mathf.Abs(ry - tabCenterY) < tabHalfWidth) {
-            if (Mathf.Pow(rx / tabProtrusion, 2) + Mathf.Pow((ry - tabCenterY) / tabHalfWidth, 2) <= 1) return false;
+        if (leftTab == -1 && Mathf.Abs(ry - tabCenterY) < tabRadius) {
+            if (Mathf.Pow(rx / tabRadius, 2) + Mathf.Pow((ry - tabCenterY) / tabRadius, 2) <= 1) return false;
         }
         
         if (in_main_rect) return true;
 
-        if (topTab == 1 && Mathf.Abs(rx - tabCenterX) < tabHalfWidth) {
-            if (Mathf.Pow((rx - tabCenterX) / tabHalfWidth, 2) + Mathf.Pow((ry - (sliceHeight - 1)) / tabProtrusion, 2) <= 1) return true;
+        if (topTab == 1 && Mathf.Abs(rx - tabCenterX) < tabRadius) {
+            if (Mathf.Pow((rx - tabCenterX) / tabRadius, 2) + Mathf.Pow((ry - (sliceHeight - 1)) / tabRadius, 2) <= 1) return true;
         }
-        if (bottomTab == 1 && Mathf.Abs(rx - tabCenterX) < tabHalfWidth) {
-            if (Mathf.Pow(ry / tabProtrusion, 2) + Mathf.Pow((rx - tabCenterX) / tabHalfWidth, 2) <= 1) return true;
+        if (bottomTab == 1 && Mathf.Abs(rx - tabCenterX) < tabRadius) {
+            if (Mathf.Pow(ry / tabRadius, 2) + Mathf.Pow((rx - tabCenterX) / tabRadius, 2) <= 1) return true;
         }
-        if (rightTab == 1 && Mathf.Abs(ry - tabCenterY) < tabHalfWidth) {
-            if (Mathf.Pow((rx - (sliceWidth - 1)) / tabProtrusion, 2) + Mathf.Pow((ry - tabCenterY) / tabHalfWidth, 2) <= 1) return true;
+        if (rightTab == 1 && Mathf.Abs(ry - tabCenterY) < tabRadius) {
+            if (Mathf.Pow((rx - (sliceWidth - 1)) / tabRadius, 2) + Mathf.Pow((ry - tabCenterY) / tabRadius, 2) <= 1) return true;
         }
-        if (leftTab == 1 && Mathf.Abs(ry - tabCenterY) < tabHalfWidth) {
-            if (Mathf.Pow(rx / tabProtrusion, 2) + Mathf.Pow((ry - tabCenterY) / tabHalfWidth, 2) <= 1) return true;
+        if (leftTab == 1 && Mathf.Abs(ry - tabCenterY) < tabRadius) {
+            if (Mathf.Pow(rx / tabRadius, 2) + Mathf.Pow((ry - tabCenterY) / tabRadius, 2) <= 1) return true;
         }
 
         return false;

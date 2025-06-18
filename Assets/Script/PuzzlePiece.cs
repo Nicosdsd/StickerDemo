@@ -44,97 +44,46 @@ public class PuzzlePiece : MonoBehaviour
 
     private AudioSource currentLoopingSound; // 当前正在播放的循环音效
 
+    public RewardSticker[] rewardStickers;
+
+    // 新增：是否为道具拼图
+    public bool isPropPiece = false;
+
     // 新增：公共 getter 用于检查拼图块是否已锁定
-    public bool IsLocked
-    {
-        get { return isLocked; }
-    }
+    public bool IsLocked => isLocked;
 
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
     {
-        if (isLocked) // 如果已经锁定，则不执行任何操作
-        {
-            return;
-        }
-
-        // 停止任何正在进行的移动或缩放协程
-        if (_moveCoroutine != null)
-        {
-            StopCoroutine(_moveCoroutine);
-            _moveCoroutine = null;
-        }
-        // 假设还有一个 _scaleCoroutine，也应该停止（根据现有代码，ChangeScaleOverTime是启动的，但没有统一的引用变量）
-        // 为了简单起见，这里暂时不显式停止缩放协程，但理想情况下应该管理好所有协程。
-        // 最好是将所有协程都用一个变量引用，或者使用 StopAllCoroutines()，但这可能会停止其他不相关的协程。
-
+        if (isLocked) return;
+        if (_moveCoroutine != null) StopCoroutine(_moveCoroutine);
         transform.position = targetArea.position;
-        transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 确保Scale设置为DragScale
-
-        // 新增：为子物体的MeshRenderer添加Light Layer2
-        //AddLightLayer2ToChildMeshRenderers();
-        
-        // 新增：播放成功吸附动画
+        transform.localScale = Vector3.one * DragScale;
         PlaySuccessAnimation();
-
-
-
-        transform.parent = targetArea; // 设置父对象
-
-
-        PuzzleGroup puzzleGroupScript = FindObjectOfType<PuzzleGroup>();
-        if (puzzleGroupScript != null)
-        {
-            puzzleGroupScript.dragObjects += score;
-            puzzleGroupScript.score += score;  
-        }
-        else
-        {
-            Debug.LogWarning("PuzzleGroup script not found in the scene.");
-        }
-            
-        DetectNeighborsAndTriggerAnimation(); // 检测邻居并触发动画
-
-        isLocked = true; // 标记为已锁定
-        _isDragging = false; // 确保拖拽状态也关闭
-
-       
-        // 播放完成音效
-        AudioManager.Instance.PlaySound("放下", transform.position); // 使用"放下"音效或一个专门的"完成"音效
-
-
-
-        // 新增：成功放下后显示LatticeModifier组件
-        if (_latticeModifier != null)
-        {
-            _latticeModifier.enabled = true;
-        }
+        transform.parent = targetArea;
+        AddScore();
+        DetectNeighborsAndTriggerAnimation();
+        isLocked = true;
+        _isDragging = false;
+        AudioManager.Instance.PlaySound("放下", transform.position);
+        if (_latticeModifier != null) _latticeModifier.enabled = true;
     }
 
     // 初始化
     void Start()
     {
         _startPosition = transform.position;
-        transform.localScale = new Vector3(StartScale, StartScale, StartScale); // 设置初始Scale
+        transform.localScale = Vector3.one * StartScale;
         animator = GetComponent<Animator>();
-       
-
-        // 新增：获取LatticeModifier组件并默认隐藏
-        _latticeModifier = GetComponentInChildren<LatticeModifier>(true); // true表示也查找非激活的子对象
-        if (_latticeModifier != null)
-        {
-            _latticeModifier.enabled = false;
-        }
-
+        _latticeModifier = GetComponentInChildren<LatticeModifier>(true);
+        if (_latticeModifier != null) _latticeModifier.enabled = false;
         dragCenter = FindObjectOfType<DragCenter>();
-
     }
 
     // 每帧更新
     void Update()
     {
 
-        //TargetVisibility();
       
     }
 
@@ -143,28 +92,13 @@ public class PuzzlePiece : MonoBehaviour
     {
         if (_isDragging)
         {
-            Vector3 currentMouse_ScreenPos = Input.mousePosition;
-            Vector3 currentMouse_WorldPos_AtPieceDepth = Camera.main.ScreenToWorldPoint(new Vector3(currentMouse_ScreenPos.x, currentMouse_ScreenPos.y, mouseConversionZ));
-
-            Vector3 mouseDelta_World = currentMouse_WorldPos_AtPieceDepth - mouseWorldPosOnDragBegin;
-
-            float targetBaseX = pieceWorldPosOnDragBegin.x + mouseDelta_World.x;
-            float targetBaseZ = pieceWorldPosOnDragBegin.z + mouseDelta_World.z;
-            // Y的初始点是 pieceWorldPosOnDragBegin.y 加上（平滑过渡的）偏移，然后跟随鼠标Y的改变量
-            float targetBaseY = (pieceWorldPosOnDragBegin.y + _currentApplyingOffsetY) + mouseDelta_World.y;
-
-            float additionalUpwardOffset = 0f;
-            if (mouseDelta_World.y > 0) // 如果鼠标向上移动
-            {
-                additionalUpwardOffset = mouseDelta_World.y * dragFactor;
-            }
-
-            //Lerp移动
-            Vector3 targetDragPosition = new Vector3(targetBaseX, targetBaseY + additionalUpwardOffset, targetBaseZ);
-            transform.position = Vector3.Lerp(transform.position, targetDragPosition, Time.fixedDeltaTime * dragSmoothSpeed);
-            //直接移动
-            // transform.position = new Vector3(targetBaseX, targetBaseY + additionalUpwardOffset, targetBaseZ); 
-
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mouseConversionZ));
+            Vector3 delta = worldPos - mouseWorldPosOnDragBegin;
+            float targetY = pieceWorldPosOnDragBegin.y + _currentApplyingOffsetY + delta.y;
+            float upOffset = delta.y > 0 ? delta.y * dragFactor : 0f;
+            Vector3 targetPos = new Vector3(pieceWorldPosOnDragBegin.x + delta.x, targetY + upOffset, pieceWorldPosOnDragBegin.z + delta.z);
+            transform.position = Vector3.Lerp(transform.position, targetPos, Time.fixedDeltaTime * dragSmoothSpeed);
         }
     }
 
@@ -173,22 +107,7 @@ public class PuzzlePiece : MonoBehaviour
     {
         UpdateBaseStartPosition(); // 拖拽前更新初始位置记录
 
-
-        if (isLocked) // 新增：如果已锁定，则不允许拖动
-        {
-            //AudioManager.Instance.PlaySound("按压",transform.position);
-             // 播放循环音效
-            // if (AudioManager.Instance != null && !string.IsNullOrEmpty("按压"))
-            // {
-            //     if (currentLoopingSound != null) // 如果已有音效在播放，先停止
-            //     {
-            //         AudioManager.Instance.StopLoopingSound(currentLoopingSound);
-            //     }
-            //     currentLoopingSound = AudioManager.Instance.PlayLoopingSound("按压", transform.position); 
-            // }
-
-            return;
-        }
+        if (isLocked) return; 
 
         // 新增：如果当前有移动协程在运行，则停止它
         if (_moveCoroutine != null)
@@ -202,19 +121,14 @@ public class PuzzlePiece : MonoBehaviour
         mouseConversionZ = Camera.main.WorldToScreenPoint(transform.position).z;
         mouseWorldPosOnDragBegin = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mouseConversionZ));
 
-        // 移除立即应用的固定向上偏移，改为平滑过渡
-        // transform.position = new Vector3(transform.position.x, pieceWorldPosOnDragBegin.y + offsetOnClick, transform.position.z);
         _currentApplyingOffsetY = 0f; // 重置当前Y偏移
         StartCoroutine(AnimateOffsetYValue(0f, offsetOnClick, scaleSmoothSpeed)); // 开始平滑Y偏移过渡
 
-        // transform.localScale = new Vector3(DragScale, DragScale, DragScale); // 设置拖拽时的Scale -> 改为协程
-        StartCoroutine(ChangeScaleOverTime(new Vector3(DragScale, DragScale, DragScale), scaleSmoothSpeed));
+        StartCoroutine(ChangeScaleOverTime(Vector3.one * DragScale, scaleSmoothSpeed));
 
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
-        //GetComponent<Collider>().enabled = false;
-        //GetComponent<HighlightEffect>().enabled = true;
-        //dragCenter.enabled = false;
+
 
     }
 
@@ -222,16 +136,6 @@ public class PuzzlePiece : MonoBehaviour
     void OnMouseUp()
     {
 
-        // 停止循环音效
-        // if (currentLoopingSound != null && AudioManager.Instance != null)
-        // {
-        //     AudioManager.Instance.StopLoopingSound(currentLoopingSound);
-        //     currentLoopingSound = null;
-        // }
-
-        //dragCenter.enabled = true;
-
-        //GetComponent<HighlightEffect>().enabled = false;
        
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
@@ -247,16 +151,33 @@ public class PuzzlePiece : MonoBehaviour
             _moveCoroutine = null;
         }
 
+        // 新增：道具拼图吸附逻辑
+        if (isPropPiece)
+        {
+            Transform nearest = FindNearestTargetArea();
+            if (nearest != null && Vector3.Distance(transform.position, nearest.position) <= snapDistance)
+            {
+                targetArea = nearest;
+                _moveCoroutine = StartCoroutine(MoveToPosition(targetArea.position, true));
+            }
+            else
+            {
+                AudioManager.Instance.PlaySound("返回", transform.position);
+                _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false));
+                StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed));
+            }
+            return;
+        }
+
         if (Vector3.Distance(transform.position, targetArea.position) <= snapDistance)
         {
             _moveCoroutine = StartCoroutine(MoveToPosition(targetArea.position, true)); // 移动到目标位置并吸附
         }
         else
         {
-           
             AudioManager.Instance.PlaySound("返回", transform.position); // 在开始返回时播放音效
             _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false)); // 移动回初始位置
-            StartCoroutine(ChangeScaleOverTime(new Vector3(StartScale, StartScale, StartScale), scaleSmoothSpeed)); // 立刻开始向StartScale过渡
+            StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed)); // 立刻开始向StartScale过渡
         }
     }
 
@@ -267,77 +188,25 @@ public class PuzzlePiece : MonoBehaviour
     /// <param name="isSnap">是否吸附到目标点（触发后续逻辑）</param>
     private IEnumerator MoveToPosition(Vector3 targetPosition, bool isSnap)
     {
-        float currentSpeed = isSnap ? snapSpeed : returnSpeed; // 根据是否吸附选择速度
-
+        float speed = isSnap ? snapSpeed : returnSpeed;
         while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, currentSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
             yield return null;
         }
-
         transform.position = targetPosition;
-
-        
-        // transform.localScale = new Vector3(StartScale, StartScale, StartScale); // 协程结束，恢复Scale -> 移到 else 分支
-        
         if (isSnap)
         {
-           //成功吸附
-           print("成功吸附");
-
-            // 新增：为子物体的MeshRenderer添加Light Layer2
             AddLightLayer2ToChildMeshRenderers();
-            
-            // 新增：播放成功吸附动画
             PlaySuccessAnimation();
-
-            transform.parent = targetArea; // 移动到这里：只有成功吸附才设置父物体
-            // 根据目标点的SpriteRenderer设置当前拼图块的Order in Layer
-          
-
-            // 新增逻辑：寻找 PuzzleGroup 实例并更新计数，然后禁用当前拼图
-            PuzzleGroup puzzleGroupScript = FindObjectOfType<PuzzleGroup>();
-            if (puzzleGroupScript != null)
-            {
-                puzzleGroupScript.dragObjects += score;
-                puzzleGroupScript.score += score; 
-            }
-            else
-            {
-                Debug.LogWarning("PuzzleGroup script not found in the scene.");
-            }
-            
-            DetectNeighborsAndTriggerAnimation(); // 检测并触发邻居的动画
-
-            // 禁用当前拼图块脚本
-            //this.enabled = false;
-        
-            isLocked = true; // 修改：标记为已锁定
-
-            // 播放完成音效
+            transform.parent = targetArea;
+            DetectNeighborsAndTriggerAnimation();
+            isLocked = true;
             AudioManager.Instance.PlaySound("放下",transform.position);
-
-            GetComponent<Collider>().enabled = true;
-
-            FindObjectOfType<PuzzleGroup2>().currentCount++;
-            FindObjectOfType<PuzzleGroup2>().currentScore += 1;
-
-            //_latticeModifier.enabled = true;
-           
+            AddScore();
+            if (isPropPiece) OnPropPiecePlaced();
         }
-
-        else
-        {
-            GetComponent<Collider>().enabled = true;
-            if (animator != null)
-            {
-                //animator.SetTrigger("Reset");
-                print("回弹");
-            }
-            // StartCoroutine(ChangeScaleOverTime(new Vector3(StartScale, StartScale, StartScale), scaleSmoothSpeed)); // 移至 OnMouseUp
-            // AudioManager.Instance.PlaySound("返回", transform.position); // 从此处移除
-        }
-        _moveCoroutine = null; // 协程结束，清空引用
+        _moveCoroutine = null;
     }
 
     // 新增：协程，用于平滑改变Scale
@@ -399,40 +268,23 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：为子物体的MeshRenderer添加Light Layer2
     private void AddLightLayer2ToChildMeshRenderers()
     {
-        // 获取所有子物体的MeshRenderer组件
-        MeshRenderer[] childMeshRenderers = GetComponentsInChildren<MeshRenderer>();
-        
-        foreach (MeshRenderer meshRenderer in childMeshRenderers)
-        {
-            // Light Layer2 对应第2位 (从0开始计数)，即 1 << 2 = 4
-            int lightLayer2Mask = 1 << 2;
-            
-            // 将Light Layer2添加到现有的Rendering Layer Mask中
-            meshRenderer.renderingLayerMask |= (uint)lightLayer2Mask;
-
-        }
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        int mask = 1 << 2;
+        foreach (var r in renderers) r.renderingLayerMask |= (uint)mask;
     }
 
     // 新增：为子物体的MeshRenderer移除Light Layer2
     private void RemoveLightLayer2FromChildMeshRenderers()
     {
-        // 获取所有子物体的MeshRenderer组件
-        MeshRenderer[] childMeshRenderers = GetComponentsInChildren<MeshRenderer>();
-        
-        foreach (MeshRenderer meshRenderer in childMeshRenderers)
-        {
-            // Light Layer2 对应第2位 (从0开始计数)，即 1 << 2 = 4
-            int lightLayer2Mask = 1 << 2;
-            
-            // 从现有的Rendering Layer Mask中移除Light Layer2
-            meshRenderer.renderingLayerMask &= ~(uint)lightLayer2Mask;
-        }
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        int mask = 1 << 2;
+        foreach (var r in renderers) r.renderingLayerMask &= ~(uint)mask;
     }
 
     // 新增：播放成功吸附动画
     public void PlaySuccessAnimation()
     {
-         AddLightLayer2ToChildMeshRenderers();
+        AddLightLayer2ToChildMeshRenderers();
         if (successAnimator != null)
         {
             print("播放成功动画");
@@ -451,25 +303,50 @@ public class PuzzlePiece : MonoBehaviour
         RemoveLightLayer2FromChildMeshRenderers();
     }
 
-    // 
-    // private void TargetVisibility()
-    // {
-      
-    //      // 判断当前物体是否在目标区域的吸附范围内
-    //     bool isInRange = Vector3.Distance(transform.position, targetArea.position) <= snapDistance;
 
-    //     if (isInRange && !isLocked && _isDragging)
-    //     {
-    //         print("在范围内");
-    //        // targetArea.GetComponent<HighlightEffect>().enabled = true;
-    //     }
-    //     else
-    //     {
-    //         //targetArea.GetComponent<HighlightEffect>().enabled = false;
-    //     }
-    // }
+    // 新增：查找最近的TargetArea（仅用于道具拼图）
+    private Transform FindNearestTargetArea()
+    {
+        PuzzleTarget[] allTargets = FindObjectsOfType<PuzzleTarget>();
+        Transform nearest = null;
+        float minDist = float.MaxValue;
+        foreach (var t in allTargets)
+        {
+            float dist = Vector3.Distance(transform.position, t.transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearest = t.transform;
+            }
+        }
+        return nearest;
+    }
 
-    // 在编辑器中绘制辅助线，方便调试
+    // 新增：道具拼图放置成功后的回调（暂时留空）
+    private void OnPropPiecePlaced()
+    {
+        // TODO: 道具拼图放置成功后的逻辑
+        GetComponent<MeshRenderer>().enabled = false;
+        if (transform.childCount > 0)
+            transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    // 加分逻辑
+    private void AddScore()
+    {
+        if (!isPropPiece)
+        {
+            var group = FindObjectOfType<PuzzleGroup>();
+            if (group != null) group.currentScore += 1;
+        }
+        if (rewardStickers != null)
+        {
+            foreach (var sticker in rewardStickers)
+                if (sticker != null) sticker.AddScore(1);
+        }
+    }
+
+     // 在编辑器中绘制辅助线，方便调试
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

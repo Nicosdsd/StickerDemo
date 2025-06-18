@@ -104,7 +104,7 @@ Material:
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
     - _FlowIntensity: 0.094
-    - _FlowOffset: 0.157
+    - _FlowOffset: 0.352
     - _FlowSpeed: 1
     - _FlowStrength: 0
     - _GlossMapScale: 0
@@ -115,7 +115,7 @@ Material:
     - _OcclusionStrength: 1
     - _OutlineIntensity: 0
     - _OutlineStrength: 0
-    - _OutlineThickness: 3
+    - _OutlineThickness: 2.3
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1

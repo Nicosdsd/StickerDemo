@@ -30,7 +30,7 @@ public class Settings : MonoBehaviour
         PuzzlePiece[] allPieces = FindObjectsOfType<PuzzlePiece>();
         foreach (PuzzlePiece piece in allPieces)
         {
-            if (piece != null && !piece.IsLocked) // 确保piece不为null且未被锁定
+            if (piece != null && !piece.IsLocked && piece.tag == "Puzzle") // 确保piece不为null且未被锁定
             {
                 piece.ForceComplete();
             }
