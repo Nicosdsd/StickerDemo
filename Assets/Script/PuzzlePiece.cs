@@ -52,6 +52,11 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked => isLocked;
 
+    public GameObject hintImage; // 拖拽提示图
+    private Animator hintAnimator; // 提示图片的动画控制器
+
+    private PlayableDirector playableDirector; // 新增：Timeline组件引用
+
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
     {
@@ -78,6 +83,18 @@ public class PuzzlePiece : MonoBehaviour
         _latticeModifier = GetComponentInChildren<LatticeModifier>(true);
         if (_latticeModifier != null) _latticeModifier.enabled = false;
         dragCenter = FindObjectOfType<DragCenter>();
+        playableDirector = GetComponent<PlayableDirector>(); // 新增：获取Timeline组件
+        
+        // 获取提示图片的动画控制器
+        if (hintImage != null)
+        {
+            hintAnimator = hintImage.GetComponent<Animator>();
+            if (hintAnimator != null)
+            {
+                hintAnimator.SetBool("active", true);
+            }
+            hintImage.SetActive(true);
+        }
     }
 
     // 每帧更新
@@ -126,17 +143,19 @@ public class PuzzlePiece : MonoBehaviour
 
         StartCoroutine(ChangeScaleOverTime(Vector3.one * DragScale, scaleSmoothSpeed));
 
+        // 播放提示图片隐藏动画
+        if (hintAnimator != null)
+        {
+            hintAnimator.SetBool("active", false);
+        }
+
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
-
-
     }
 
     // 鼠标抬起时触发
     void OnMouseUp()
     {
-
-       
         if (!_isDragging) // 新增：如果不是正在拖拽状态，则直接返回
         {
             return;
@@ -149,6 +168,12 @@ public class PuzzlePiece : MonoBehaviour
         {
             StopCoroutine(_moveCoroutine);
             _moveCoroutine = null;
+        }
+
+        // 播放提示图片显示动画
+        if (hintAnimator != null)
+        {
+            hintAnimator.SetBool("active", true);
         }
 
         // 新增：道具拼图吸附逻辑
@@ -325,10 +350,15 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：道具拼图放置成功后的回调（暂时留空）
     private void OnPropPiecePlaced()
     {
-        // TODO: 道具拼图放置成功后的逻辑
         GetComponent<MeshRenderer>().enabled = false;
         if (transform.childCount > 0)
             transform.GetChild(0).gameObject.SetActive(true);
+            
+        // 新增：播放Timeline动画
+        if (playableDirector != null)
+        {
+            playableDirector.Play();
+        }
     }
 
     // 加分逻辑

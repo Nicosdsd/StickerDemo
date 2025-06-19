@@ -13,6 +13,8 @@ Shader "Unlit/OutlineFlowURP" // Renamed to indicate URP compatibility
         [HDR]_FlowColor ("流动颜色 (Flow Color Tint)", Color) = (1,1,1,1) // 流动颜色，支持HDR
         _FlowOffset ("流动偏移 (Flow Offset)", Range(0.0, 1.0)) = 0.0 // 新增：流动偏移控制，并添加范围
         _FlowIntensity ("流光强度 (Flow Intensity)", Range(0.0, 1.0)) = 1.0 // 新增：流光强度控制
+        [Toggle] _AutoFlow ("自动流动 (Auto Flow)", Float) = 0 // 新增：自动流动开关
+        _FlowSpeed ("流动速度 (Flow Speed)", Range(0.0, 2.0)) = 1.0 // 新增：流动速度控制
     }
     SubShader
     {
@@ -64,6 +66,8 @@ Shader "Unlit/OutlineFlowURP" // Renamed to indicate URP compatibility
                 float _FlowOffset;
                 float _OutlineIntensity;
                 float _FlowIntensity;
+                float _AutoFlow;
+                float _FlowSpeed;
                 // _BaseMap_TexelSize is usually provided by Unity automatically for URP
                 // If not, it can be declared here: float4 _BaseMap_TexelSize;
             CBUFFER_END
@@ -144,7 +148,14 @@ Shader "Unlit/OutlineFlowURP" // Renamed to indicate URP compatibility
                     float2 dir = IN.uv - centerUV;
                     float angle = atan2(dir.y, dir.x);
                     float normalizedAngle = (angle / (2.0f * 3.14159265359f)) + 0.5f;
-                    float2 flowUV = float2(normalizedAngle - _FlowOffset, 0.5f);
+                    
+                    // 修改流动UV计算，加入自动流动逻辑
+                    float flowOffset = _FlowOffset;
+                    if (_AutoFlow > 0.5)
+                    {
+                        flowOffset = frac(_Time.y * _FlowSpeed);
+                    }
+                    float2 flowUV = float2(normalizedAngle - flowOffset, 0.5f);
                     
                     half4 flowSample = SAMPLE_TEXTURE2D(_FlowTex, sampler_FlowTex, flowUV);
                     half4 flowEffectColor = flowSample * _FlowColor;
