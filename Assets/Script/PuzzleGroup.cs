@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Playables;
 
+[System.Serializable]
+public struct PropChanceStep
+{
+    public int refreshThreshold; // 从第几次刷新开始
+    [Range(0, 1)]
+    public float chance;       // 道具出现的概率
+}
+
 public class PuzzleGroup : MonoBehaviour
 {
     public Transform target1;
@@ -15,11 +23,18 @@ public class PuzzleGroup : MonoBehaviour
 
     public GameObject targetClickObject;
 
-    public int currentScore = 0;
-    public int targetScore = 9;
+    public List<PropChanceStep> propChanceProgression = new List<PropChanceStep>
+    {
+        new PropChanceStep { refreshThreshold = 1, chance = 1.0f },
+        new PropChanceStep { refreshThreshold = 2, chance = 0.5f },
+        new PropChanceStep { refreshThreshold = 8, chance = 0.1f }
+    };
 
     public PlayableDirector timelineDirector;
     private bool hasTimelinePlayed = false;
+
+    private List<Transform> propPiecePool = new List<Transform>();
+    private int refreshCount = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,17 +66,11 @@ public class PuzzleGroup : MonoBehaviour
             }
         }
 
-         if (PropGroup != null && startGroup != null)
+        if (PropGroup != null)
         {
-            List<Transform> children = new List<Transform>();
-            foreach (Transform child in PropGroup)
+            foreach (Transform prop in PropGroup)
             {
-                children.Add(child);
-            }
-            foreach (Transform child in children)
-            {
-                child.SetParent(startGroup);
-                child.localPosition = Vector3.zero; // 可选：重置位置
+                propPiecePool.Add(prop);
             }
         }
 
@@ -71,7 +80,7 @@ public class PuzzleGroup : MonoBehaviour
     void Update()
     {
        
-        if (currentScore == targetScore && !hasTimelinePlayed && timelineDirector != null)
+        if (Settings.Instance != null && Settings.Instance.currentScore >= Settings.Instance.targetScore && !hasTimelinePlayed && timelineDirector != null)
         {
             timelineDirector.Play();
             hasTimelinePlayed = true;
@@ -102,7 +111,21 @@ public class PuzzleGroup : MonoBehaviour
         }
     }
 
-   
+    float GetCurrentPropChance()
+    {
+        // 对列表按刷新阈值降序排序
+        propChanceProgression.Sort((a, b) => b.refreshThreshold.CompareTo(a.refreshThreshold));
+        
+        foreach (var step in propChanceProgression)
+        {
+            if (refreshCount >= step.refreshThreshold)
+            {
+                return step.chance;
+            }
+        }
+        
+        return 0f; // 默认概率为0
+    }
 
     public void AssignRandomChildrenToTargets()
     {
@@ -112,33 +135,79 @@ public class PuzzleGroup : MonoBehaviour
             return;
         }
 
-        List<Transform> children = new List<Transform>();
+        refreshCount++;
+
+        List<Transform> regularPieces = new List<Transform>();
         foreach (Transform child in transform)
         {
-            children.Add(child);
+            regularPieces.Add(child);
         }
 
-        if (children.Count == 0)
+        List<Transform> piecesToAssign = new List<Transform>();
+        System.Random rng = new System.Random();
+
+        float currentPropChance = GetCurrentPropChance();
+        bool includeProp = UnityEngine.Random.value < currentPropChance && propPiecePool.Count > 0 && regularPieces.Count >= 2;
+
+        if (includeProp)
         {
-            //Debug.LogError("没有可分配的子物体。");
+            // 选出1个道具块和2个普通块
+            int propIndex = rng.Next(propPiecePool.Count);
+            Transform prop = propPiecePool.Find(p => p.parent == PropGroup);
+            if(prop != null)
+            {
+                piecesToAssign.Add(prop);
+
+                var shuffledRegular = regularPieces.OrderBy(a => rng.Next()).ToList();
+                for (int i = 0; i < 2; i++)
+                {
+                    piecesToAssign.Add(shuffledRegular[i]);
+                }
+            }
+            else
+            {
+                includeProp = false; // 没有可用的道具块
+            }
+        }
+        
+        if(!includeProp)
+        {
+            // 选出3个普通块
+            if (regularPieces.Count >= 3)
+            {
+                var shuffledRegular = regularPieces.OrderBy(a => rng.Next()).ToList();
+                for (int i = 0; i < 3; i++)
+                {
+                    piecesToAssign.Add(shuffledRegular[i]);
+                }
+            }
+            else
+            {
+                piecesToAssign.AddRange(regularPieces);
+                Debug.LogWarning("普通拼图块不足3个。");
+            }
+        }
+
+
+        if (piecesToAssign.Count == 0)
+        {
             return;
         }
 
-        // 随机打乱子物体列表
-        System.Random rng = new System.Random();
-        List<Transform> shuffledChildren = children.OrderBy(a => rng.Next()).ToList();
+        // 随机打乱待选列表
+        List<Transform> shuffledPieces = piecesToAssign.OrderBy(a => rng.Next()).ToList();
 
         // 目标列表
         Transform[] targets = new Transform[] { target1, target2, target3 };
 
         // 分配
-        for (int i = 0; i < Mathf.Min(3, shuffledChildren.Count); i++)
+        for (int i = 0; i < Mathf.Min(targets.Length, shuffledPieces.Count); i++)
         {
-            shuffledChildren[i].SetParent(targets[i]);
-            shuffledChildren[i].localPosition = Vector3.zero;
+            shuffledPieces[i].SetParent(targets[i]);
+            shuffledPieces[i].localPosition = Vector3.zero;
         }
 
-        Debug.Log($"已成功将{Mathf.Min(3, shuffledChildren.Count)}个随机子物体分配到目标位置。");
+        Debug.Log($"已成功将{Mathf.Min(targets.Length, shuffledPieces.Count)}个随机子物体分配到目标位置。");
     }
 
     public void ResetAndRandomizeTargets()
@@ -157,7 +226,14 @@ public class PuzzleGroup : MonoBehaviour
             // Move each child back to the parent transform (the pool)
             foreach (Transform child in childrenToMove)
             {
-                child.SetParent(transform);
+                if (propPiecePool.Contains(child))
+                {
+                    child.SetParent(PropGroup);
+                }
+                else
+                {
+                    child.SetParent(transform);
+                }
                 child.localPosition = Vector3.zero; // Optional: Reset position
             }
         };

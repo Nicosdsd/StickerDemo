@@ -351,8 +351,6 @@ public class PuzzlePiece : MonoBehaviour
     private void OnPropPiecePlaced()
     {
         GetComponent<MeshRenderer>().enabled = false;
-        if (transform.childCount > 0)
-            transform.GetChild(0).gameObject.SetActive(true);
             
         // 新增：播放Timeline动画
         if (playableDirector != null)
@@ -366,8 +364,8 @@ public class PuzzlePiece : MonoBehaviour
     {
         if (!isPropPiece)
         {
-            var group = FindObjectOfType<PuzzleGroup>();
-            if (group != null) group.currentScore += 1;
+            Settings.Instance.currentScore += 1;
+
         }
         if (rewardStickers != null)
         {
