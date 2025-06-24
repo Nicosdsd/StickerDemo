@@ -57,6 +57,8 @@ public class PuzzlePiece : MonoBehaviour
 
     private PlayableDirector playableDirector; // 新增：Timeline组件引用
 
+    private Settings settings; // 新增：Settings实例字段
+
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
     {
@@ -84,6 +86,13 @@ public class PuzzlePiece : MonoBehaviour
         if (_latticeModifier != null) _latticeModifier.enabled = false;
         dragCenter = FindObjectOfType<DragCenter>();
         playableDirector = GetComponent<PlayableDirector>(); // 新增：获取Timeline组件
+        
+        // 新增：查找Settings实例
+        settings = FindObjectOfType<Settings>();
+        if (settings == null)
+        {
+            Debug.LogError("未找到 Settings 组件，请确保场景中有 Settings 脚本。");
+        }
         
         // 获取提示图片的动画控制器
         if (hintImage != null)
@@ -364,8 +373,10 @@ public class PuzzlePiece : MonoBehaviour
     {
         if (!isPropPiece)
         {
-            Settings.Instance.currentScore += 1;
-
+            if (settings != null)
+            {
+                settings.currentScore += 1;
+            }
         }
         if (rewardStickers != null)
         {

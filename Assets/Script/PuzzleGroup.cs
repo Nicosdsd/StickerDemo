@@ -36,10 +36,19 @@ public class PuzzleGroup : MonoBehaviour
     private List<Transform> propPiecePool = new List<Transform>();
     private int refreshCount = 0;
 
+    public Settings settings;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       
+        if (settings == null)
+        {
+            settings = FindObjectOfType<Settings>();
+            if (settings == null)
+            {
+                Debug.LogError("未找到 Settings 组件，请在 Inspector 中赋值或确保场景中有 Settings 脚本。");
+            }
+        }
         
         if (startGroup != null && endGroup != null)
         {
@@ -80,7 +89,7 @@ public class PuzzleGroup : MonoBehaviour
     void Update()
     {
        
-        if (Settings.Instance != null && Settings.Instance.currentScore >= Settings.Instance.targetScore && !hasTimelinePlayed && timelineDirector != null)
+        if (settings != null && settings.currentScore >= settings.targetScore && !hasTimelinePlayed && timelineDirector != null)
         {
             timelineDirector.Play();
             hasTimelinePlayed = true;

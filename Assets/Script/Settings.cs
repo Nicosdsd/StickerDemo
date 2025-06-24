@@ -5,9 +5,8 @@ using System;
 
 public class Settings : MonoBehaviour
 {
-    public static Settings Instance { get; private set; }
-
-    [Header("倒计时设置")]
+    // 移除单例
+    //[Header("倒计时设置")]
     public Text countdownText; // 用于显示倒计时的UI Text
     public GameObject timeoutPanel; // 时间到时要显示的UI Panel
     public float countdownDuration = 60f; // 倒计时总时长（秒）
@@ -20,33 +19,14 @@ public class Settings : MonoBehaviour
     private float currentTime;
     private bool isTiming = false;
 
+    public Image fillImage;
+
+    private float currentFillAmount = 0f;
+    private float fillAmountVelocity = 0f; // 用于SmoothDamp
+
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
-        {
-            // An instance already exists. Let's decide if this new instance is "better".
-            // A "better" instance has its UI references set.
-            bool thisHasUI = scoreText != null && countdownText != null;
-            bool instanceHasUI = Instance.scoreText != null && Instance.countdownText != null;
-
-            if (!instanceHasUI && thisHasUI)
-            {
-                // The existing instance is incomplete, and this one is. Replace the old one.
-                Destroy(Instance.gameObject);
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                // The existing instance is fine, or this one is not better. Destroy this one.
-                Destroy(gameObject);
-            }
-        }
+        // 移除单例相关逻辑
     }
 
     void OnEnable()
@@ -122,7 +102,7 @@ public class Settings : MonoBehaviour
 
                 // 使用TimeSpan来格式化时间为 mm:ss
                 TimeSpan timeSpan = TimeSpan.FromSeconds(secondsToDisplay);
-                countdownText.text = "倒计时: " + timeSpan.ToString(@"mm\:ss");
+                countdownText.text = "剩余时间:" + timeSpan.ToString(@"mm\:ss");
             }
 
             // 检查时间是否结束
@@ -145,7 +125,14 @@ public class Settings : MonoBehaviour
 
         if (scoreText != null)
         {
-            scoreText.text = "分数: " + currentScore;
+            scoreText.text = " " + currentScore; //分数
+        }
+        // 使用SmoothDamp平滑fillImage的fillAmount
+        if (fillImage != null && targetScore > 0)
+        {
+            float targetFill = (float)currentScore / targetScore;
+            currentFillAmount = Mathf.SmoothDamp(currentFillAmount, targetFill, ref fillAmountVelocity, 0.15f); // 0.15f为缓动时间，可调整
+            fillImage.fillAmount = currentFillAmount;
         }
     }
 

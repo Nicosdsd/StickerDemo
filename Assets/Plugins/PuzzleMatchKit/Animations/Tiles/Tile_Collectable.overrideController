@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Tile_Collectable
+  m_Controller: {fileID: 9100000, guid: 88af3e6314e53d94e8545ddbb896f0aa, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: d285623cce366214eb08da311524085c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d285623cce366214eb08da311524085c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: b6827d4a4a7dc4ba6b29dbc3508641c8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d1e0e6c0416214a04b4598e45348b881, type: 2}

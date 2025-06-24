@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Popup_InGameSettings
+  m_Controller: {fileID: 9100000, guid: 5ecc5f440dd47d3458ae0003ef9277c7, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 4cff2b047ff623f4bb2d7692c4bfe281, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b37f376135afd49b2a5cd1c32f38f50e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 93a79bc89b8920249a5c54484cdd9f38, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0de1f81e943164468859d3f4f30bec38, type: 2}

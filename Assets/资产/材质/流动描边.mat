@@ -91,6 +91,7 @@ Material:
     - _AlphaClip: 1
     - _AlphaThreshold: 0.5
     - _AlphaToMask: 1
+    - _AutoFlow: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -103,7 +104,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FlowIntensity: 0.094
+    - _FlowIntensity: 0
     - _FlowOffset: 0.352
     - _FlowSpeed: 1
     - _FlowStrength: 0

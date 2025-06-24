@@ -1,0 +1,25 @@
+Puzzle Match Kit is governed by the Asset Store EULA; however, the following components are governed by the licenses indicated below:
+
+* Fonts (PuzzleMatchKit/Fonts folder)
+
+    - SIL OPEN FONT LICENSE Version 1.1
+
+    - License details available here: https://opensource.org/licenses/OFL-1.1
+
+* Sounds (PuzzleMatchKit/Sounds folder)
+
+    - Creative Commons Attribution 3.0 Unported License
+
+    - License details available here: https://creativecommons.org/licenses/by/3.0/legalcode
+
+* Full Serializer library:
+
+    - The MIT License (MIT)
+
+    - License details available here: https://github.com/dentedpixel/LeanTween/blob/master/Assets/LeanTween/License.txt
+
+* LeanTween library:
+
+    - The MIT License (MIT)
+
+    - License details available here: https://github.com/jacobdufault/fullserializer/blob/master/LICENSE.md

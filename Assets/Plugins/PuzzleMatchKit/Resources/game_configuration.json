@@ -1,0 +1,94 @@
+{
+    "maxLives": 5,
+    "timeToNextLife": 300,
+    "livesRefillCost": 100,
+    "initialCoins": 300,
+    "numExtraMoves": 5,
+    "extraMovesCost": 100,
+    "numExtraTime": 15,
+    "extraTimeCost": 100,
+    "defaultTileScore": 10,
+    "tileScoreOverrides": [],
+    "boosterNeededMatches": {
+        "HorizontalBomb": 5,
+        "VerticalBomb": 5,
+        "Dynamite": 6,
+        "ColorBomb": 7
+    },
+    "ingameBoosterAmount": {
+        "HorizontalBomb": 3,
+        "VerticalBomb": 3,
+        "Dynamite": 3,
+        "ColorBomb": 3
+    },
+    "ingameBoosterCost": {
+        "HorizontalBomb": 300,
+        "VerticalBomb": 300,
+        "Dynamite": 300,
+        "ColorBomb": 300
+    },
+    "defaultZoomLevel": 1.4,
+    "defaultCanvasScalingMatch": 0.5,
+    "resolutionOverrides": [
+        {
+            "name": "iPhone X",
+            "width": 1125,
+            "height": 2436,
+            "zoomLevel": 1.4,
+            "canvasScalingMatch": 0.0
+        },
+        {
+            "name": "Samsung Galaxy Note 8",
+            "width": 1440,
+            "height": 2960,
+            "zoomLevel": 1.4,
+            "canvasScalingMatch": 0.0
+        }
+    ],
+    "adsGameIdIos": "Replace with your game ID for iOS",
+    "adsGameIdAndroid": "Replace with your game ID for Android",
+    "adsTestMode": true,
+    "rewardedAdCoins": 150,
+    "iapItems": [
+        {
+            "storeId": "com.gamevanilla.puzzlematch.coinspack5",
+            "numCoins": 3600,
+            "discount": 40,
+            "mostPopular": false,
+            "bestValue": true,
+            "coinIcon": "VeryLarge"
+        },
+        {
+            "storeId": "com.gamevanilla.puzzlematch.coinspack4",
+            "numCoins": 1200,
+            "discount": 20,
+            "mostPopular": false,
+            "bestValue": false,
+            "coinIcon": "Large"
+        },
+        {
+            "storeId": "com.gamevanilla.puzzlematch.coinspack3",
+            "numCoins": 950,
+            "discount": 15,
+            "mostPopular": true,
+            "bestValue": false,
+            "coinIcon": "MediumLarge"
+        },
+        {
+            "storeId": "com.gamevanilla.puzzlematch.coinspack2",
+            "numCoins": 400,
+            "discount": 5,
+            "mostPopular": false,
+            "bestValue": false,
+            "coinIcon": "MediumSmall"
+        },
+        {
+            "storeId": "com.gamevanilla.puzzlematch.coinspack1",
+            "numCoins": 150,
+            "discount": 0,
+            "mostPopular": false,
+            "bestValue": false,
+            "coinIcon": "Small"
+        }
+    ]
+}
