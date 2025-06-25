@@ -80,7 +80,7 @@ public class PuzzlePiece : MonoBehaviour
     void Start()
     {
         _startPosition = transform.position;
-        transform.localScale = Vector3.one * StartScale;
+        //transform.localScale = Vector3.one * StartScale;
         animator = GetComponent<Animator>();
         _latticeModifier = GetComponentInChildren<LatticeModifier>(true);
         if (_latticeModifier != null) _latticeModifier.enabled = false;
