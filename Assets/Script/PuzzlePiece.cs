@@ -59,6 +59,9 @@ public class PuzzlePiece : MonoBehaviour
 
     private Settings settings; // 新增：Settings实例字段
 
+    public GameObject scorePopupPrefab; // 加分Prefab
+    public Canvas mainCanvas; // 主Canvas
+
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
     {
@@ -238,7 +241,12 @@ public class PuzzlePiece : MonoBehaviour
             isLocked = true;
             AudioManager.Instance.PlaySound("放下",transform.position);
             AddScore();
+            if (settings != null) settings.AddCombo(true); // ★★★ 新增：成功combo
             if (isPropPiece) OnPropPiecePlaced();
+        }
+        else
+        {
+            if (settings != null) settings.AddCombo(false); // ★★★ 新增：失败combo归零
         }
         _moveCoroutine = null;
     }
@@ -376,12 +384,34 @@ public class PuzzlePiece : MonoBehaviour
             if (settings != null)
             {
                 settings.currentScore += 1;
+                ShowScorePopup();
             }
         }
         if (rewardStickers != null)
         {
             foreach (var sticker in rewardStickers)
                 if (sticker != null) sticker.AddScore(1);
+        }
+    }
+
+    private void ShowScorePopup()
+    {
+        if (scorePopupPrefab != null && mainCanvas != null)
+        {
+            // 1. 3D世界坐标转屏幕坐标
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+            // 2. 屏幕坐标转UI本地坐标
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                mainCanvas.transform as RectTransform,
+                screenPos,
+                mainCanvas.worldCamera,
+                out Vector2 localPoint
+            );
+
+            // 3. 实例化Prefab并设置位置
+            GameObject popup = Instantiate(scorePopupPrefab, mainCanvas.transform);
+            popup.GetComponent<RectTransform>().anchoredPosition = localPoint;
         }
     }
 

@@ -16,6 +16,10 @@ public class Settings : MonoBehaviour
     public int currentScore = 0;
     public int targetScore = 9;
 
+    public int currentCombo = 0;
+    public int targetCombo = 3;
+    public GameObject comboText;
+
     private float currentTime;
     private bool isTiming = false;
 
@@ -150,6 +154,7 @@ public class Settings : MonoBehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
         // 使用场景管理器重新加载该场景
         SceneManager.LoadScene(currentSceneName);
+        ResumeGame();
     }
 
     // 调用此方法来暂停游戏
@@ -176,5 +181,22 @@ public class Settings : MonoBehaviour
             }
         }
         Debug.Log("All puzzles completed via backdoor!");
+    }
+
+    public void AddCombo(bool success)
+    {
+        if (success)
+        {
+            currentCombo++;
+            if (currentCombo >= targetCombo && comboText != null)
+            {
+                comboText.GetComponent<Animator>().SetTrigger("Combo");
+                currentCombo = 0;
+            }
+        }
+        else
+        {
+            currentCombo = 0;
+        }
     }
 }

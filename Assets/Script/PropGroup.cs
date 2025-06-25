@@ -47,7 +47,7 @@ public class PropGroup : MonoBehaviour
                 Vector3 worldPos = canvasCamera.ScreenToWorldPoint(screenPos);
 
                 // 保证Z轴为0
-                worldPos.z = 0f;
+                //worldPos.z = 0f;
                 item.propObject.transform.position = worldPos;
                 // 你可以根据需要设置缩放
             }
