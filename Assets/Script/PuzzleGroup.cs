@@ -83,6 +83,10 @@ public class PuzzleGroup : MonoBehaviour
             }
         }
 
+        // 保证每个目标初始都有拼图
+        if (target1 != null && target1.childCount == 0) AssignRandomChildToTarget(target1);
+        if (target2 != null && target2.childCount == 0) AssignRandomChildToTarget(target2);
+        if (target3 != null && target3.childCount == 0) AssignRandomChildToTarget(target3);
     }
 
     // Update is called once per frame
@@ -110,13 +114,18 @@ public class PuzzleGroup : MonoBehaviour
             }
         }
 
-        // 新增：判断三个目标下的子物体是否都为空
-        if (target1 != null && target2 != null && target3 != null)
+        // 新逻辑：哪个目标没拼图就补哪个，始终保证3个目标有拼图
+        if (target1 != null && target1.childCount == 0)
         {
-            if (target1.childCount == 0 && target2.childCount == 0 && target3.childCount == 0)
-            {
-                AssignRandomChildrenToTargets();
-            }
+            AssignRandomChildToTarget(target1);
+        }
+        if (target2 != null && target2.childCount == 0)
+        {
+            AssignRandomChildToTarget(target2);
+        }
+        if (target3 != null && target3.childCount == 0)
+        {
+            AssignRandomChildToTarget(target3);
         }
     }
 
@@ -136,15 +145,9 @@ public class PuzzleGroup : MonoBehaviour
         return 0f; // 默认概率为0
     }
 
-    public void AssignRandomChildrenToTargets()
+    public void AssignRandomChildToTarget(Transform target)
     {
-        if (target1 == null || target2 == null || target3 == null)
-        {
-            Debug.LogError("请在 Inspector 中分配所有三个目标 Transform。");
-            return;
-        }
-
-        refreshCount++;
+        if (target == null) return;
 
         // 收集所有未分配的拼图块
         List<Transform> allPieces = new List<Transform>();
@@ -175,26 +178,14 @@ public class PuzzleGroup : MonoBehaviour
             }
         }
 
-        // 随机选取3个（或不足3个全部）
-        List<Transform> piecesToAssign = new List<Transform>();
-        System.Random rng = new System.Random();
-        var shuffled = candidatePieces.OrderBy(a => rng.Next()).ToList();
-        for (int i = 0; i < Mathf.Min(3, shuffled.Count); i++)
+        if (candidatePieces.Count > 0)
         {
-            piecesToAssign.Add(shuffled[i]);
+            System.Random rng = new System.Random();
+            var selected = candidatePieces[rng.Next(candidatePieces.Count)];
+            selected.SetParent(target);
+            selected.localPosition = Vector3.zero;
+            Debug.Log($"已为目标{target.name}分配一个优先级为{minPriority}的拼图。");
         }
-
-        // 目标列表
-        Transform[] targets = new Transform[] { target1, target2, target3 };
-
-        // 分配
-        for (int i = 0; i < Mathf.Min(targets.Length, piecesToAssign.Count); i++)
-        {
-            piecesToAssign[i].SetParent(targets[i]);
-            piecesToAssign[i].localPosition = Vector3.zero;
-        }
-
-        Debug.Log($"已成功将{Mathf.Min(targets.Length, piecesToAssign.Count)}个优先级为{minPriority}的拼图分配到目标位置。");
     }
 
     public void ResetAndRandomizeTargets()
@@ -230,6 +221,8 @@ public class PuzzleGroup : MonoBehaviour
         returnChildrenToPool(target3);
 
         // Now, with all pieces back in the pool, we can assign new random ones.
-        AssignRandomChildrenToTargets();
+        AssignRandomChildToTarget(target1);
+        AssignRandomChildToTarget(target2);
+        AssignRandomChildToTarget(target3);
     }
 }
