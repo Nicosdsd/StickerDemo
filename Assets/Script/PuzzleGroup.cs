@@ -146,77 +146,55 @@ public class PuzzleGroup : MonoBehaviour
 
         refreshCount++;
 
-        List<Transform> regularPieces = new List<Transform>();
+        // 收集所有未分配的拼图块
+        List<Transform> allPieces = new List<Transform>();
         foreach (Transform child in transform)
         {
-            regularPieces.Add(child);
+            allPieces.Add(child);
         }
 
+        // 找到当前最小的priority
+        int minPriority = int.MaxValue;
+        foreach (Transform t in allPieces)
+        {
+            PuzzlePiece piece = t.GetComponent<PuzzlePiece>();
+            if (piece != null && piece.priority < minPriority)
+            {
+                minPriority = piece.priority;
+            }
+        }
+
+        // 只选取priority等于minPriority的拼图块
+        List<Transform> candidatePieces = new List<Transform>();
+        foreach (Transform t in allPieces)
+        {
+            PuzzlePiece piece = t.GetComponent<PuzzlePiece>();
+            if (piece != null && piece.priority == minPriority)
+            {
+                candidatePieces.Add(t);
+            }
+        }
+
+        // 随机选取3个（或不足3个全部）
         List<Transform> piecesToAssign = new List<Transform>();
         System.Random rng = new System.Random();
-
-        float currentPropChance = GetCurrentPropChance();
-        bool includeProp = UnityEngine.Random.value < currentPropChance && propPiecePool.Count > 0 && regularPieces.Count >= 2;
-
-        if (includeProp)
+        var shuffled = candidatePieces.OrderBy(a => rng.Next()).ToList();
+        for (int i = 0; i < Mathf.Min(3, shuffled.Count); i++)
         {
-            // 选出1个道具块和2个普通块
-            int propIndex = rng.Next(propPiecePool.Count);
-            Transform prop = propPiecePool.Find(p => p.parent == PropGroup);
-            if(prop != null)
-            {
-                piecesToAssign.Add(prop);
-
-                var shuffledRegular = regularPieces.OrderBy(a => rng.Next()).ToList();
-                for (int i = 0; i < 2; i++)
-                {
-                    piecesToAssign.Add(shuffledRegular[i]);
-                }
-            }
-            else
-            {
-                includeProp = false; // 没有可用的道具块
-            }
+            piecesToAssign.Add(shuffled[i]);
         }
-        
-        if(!includeProp)
-        {
-            // 选出3个普通块
-            if (regularPieces.Count >= 3)
-            {
-                var shuffledRegular = regularPieces.OrderBy(a => rng.Next()).ToList();
-                for (int i = 0; i < 3; i++)
-                {
-                    piecesToAssign.Add(shuffledRegular[i]);
-                }
-            }
-            else
-            {
-                piecesToAssign.AddRange(regularPieces);
-                Debug.LogWarning("普通拼图块不足3个。");
-            }
-        }
-
-
-        if (piecesToAssign.Count == 0)
-        {
-            return;
-        }
-
-        // 随机打乱待选列表
-        List<Transform> shuffledPieces = piecesToAssign.OrderBy(a => rng.Next()).ToList();
 
         // 目标列表
         Transform[] targets = new Transform[] { target1, target2, target3 };
 
         // 分配
-        for (int i = 0; i < Mathf.Min(targets.Length, shuffledPieces.Count); i++)
+        for (int i = 0; i < Mathf.Min(targets.Length, piecesToAssign.Count); i++)
         {
-            shuffledPieces[i].SetParent(targets[i]);
-            shuffledPieces[i].localPosition = Vector3.zero;
+            piecesToAssign[i].SetParent(targets[i]);
+            piecesToAssign[i].localPosition = Vector3.zero;
         }
 
-        Debug.Log($"已成功将{Mathf.Min(targets.Length, shuffledPieces.Count)}个随机子物体分配到目标位置。");
+        Debug.Log($"已成功将{Mathf.Min(targets.Length, piecesToAssign.Count)}个优先级为{minPriority}的拼图分配到目标位置。");
     }
 
     public void ResetAndRandomizeTargets()

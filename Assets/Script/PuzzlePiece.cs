@@ -62,6 +62,8 @@ public class PuzzlePiece : MonoBehaviour
     public GameObject scorePopupPrefab; // 加分Prefab
     public Canvas mainCanvas; // 主Canvas
 
+    public int priority = 0; // 生成优先级，0为最高，依次递增
+
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
     {
