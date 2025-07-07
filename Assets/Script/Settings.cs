@@ -11,14 +11,10 @@ public class Settings : MonoBehaviour
     public GameObject timeoutPanel; // 时间到时要显示的UI Panel
     public float countdownDuration = 60f; // 倒计时总时长（秒）
 
-    [Header("分数设置")]
-    public Text scoreText;
-    public int currentScore = 0;
-    public int targetScore = 9;
-
-    public int currentCombo = 0;
-    public int targetCombo = 3;
-    public GameObject comboText;
+    [Header("拼图数量设置")]
+    public Text pieceCountText;
+    public int remainingPieces = 9; // 剩余拼图数量
+    public int targetPieceCount = 9; // 总拼图数量
 
     private float currentTime;
     private bool isTiming = false;
@@ -56,9 +52,9 @@ public class Settings : MonoBehaviour
             {
                 countdownText = t;
             }
-            else if (t.gameObject.name == scoreText.gameObject.name)
+            else if (t.gameObject.name == pieceCountText.gameObject.name)
             {
-                scoreText = t;
+                pieceCountText = t;
             }
         }
 
@@ -77,6 +73,7 @@ public class Settings : MonoBehaviour
         // Reset the timer when a scene is loaded/reloaded
         currentTime = countdownDuration;
         isTiming = true;
+        remainingPieces = targetPieceCount;
     }
 
     void Start()
@@ -129,14 +126,14 @@ public class Settings : MonoBehaviour
             }
         }
 
-        if (scoreText != null)
+        if (pieceCountText != null)
         {
-            scoreText.text = " " + currentScore; //分数
+            pieceCountText.text = "" + remainingPieces + "块";
         }
         // 使用SmoothDamp平滑fillImage的fillAmount
-        if (fillImage != null && targetScore > 0)
+        if (fillImage != null && targetPieceCount > 0)
         {
-            float targetFill = (float)currentScore / targetScore;
+            float targetFill = (float)remainingPieces / targetPieceCount;
             currentFillAmount = Mathf.SmoothDamp(currentFillAmount, targetFill, ref fillAmountVelocity, 0.15f); // 0.15f为缓动时间，可调整
             fillImage.fillAmount = currentFillAmount;
             // 同步PropGroup的progress
@@ -183,20 +180,15 @@ public class Settings : MonoBehaviour
         Debug.Log("All puzzles completed via backdoor!");
     }
 
-    public void AddCombo(bool success)
+    // 新增：减少拼图数量的方法
+    public void DecreasePieceCount()
     {
-        if (success)
+        remainingPieces--;
+        if (remainingPieces <= 0)
         {
-            currentCombo++;
-            if (currentCombo >= targetCombo && comboText != null)
-            {
-                comboText.GetComponent<Animator>().SetTrigger("Combo");
-                currentCombo = 0;
-            }
-        }
-        else
-        {
-            currentCombo = 0;
+            remainingPieces = 0;
+            // TODO: 通关逻辑，比如弹窗、暂停等
+            Debug.Log("全部拼图完成！");
         }
     }
 }

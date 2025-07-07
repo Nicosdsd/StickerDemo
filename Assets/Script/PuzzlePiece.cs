@@ -53,7 +53,7 @@ public class PuzzlePiece : MonoBehaviour
     public bool IsLocked => isLocked;
 
     public GameObject hintImage; // 拖拽提示图
-    private Animator hintAnimator; // 提示图片的动画控制器
+    //private Animator hintAnimator; // 提示图片的动画控制器
 
     private PlayableDirector playableDirector; // 新增：Timeline组件引用
 
@@ -100,7 +100,7 @@ public class PuzzlePiece : MonoBehaviour
         }
         
         // 获取提示图片的动画控制器
-        if (hintImage != null)
+        /*if (hintImage != null)
         {
             hintAnimator = hintImage.GetComponent<Animator>();
             if (hintAnimator != null)
@@ -108,7 +108,7 @@ public class PuzzlePiece : MonoBehaviour
                 hintAnimator.SetBool("active", true);
             }
             hintImage.SetActive(true);
-        }
+        }*/
     }
 
     // 每帧更新
@@ -158,10 +158,10 @@ public class PuzzlePiece : MonoBehaviour
         StartCoroutine(ChangeScaleOverTime(Vector3.one * DragScale, scaleSmoothSpeed));
 
         // 播放提示图片隐藏动画
-        if (hintAnimator != null)
+        /*if (hintAnimator != null)
         {
             hintAnimator.SetBool("active", false);
-        }
+        }*/
 
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
@@ -185,10 +185,10 @@ public class PuzzlePiece : MonoBehaviour
         }
 
         // 播放提示图片显示动画
-        if (hintAnimator != null)
+        /*if (hintAnimator != null)
         {
             hintAnimator.SetBool("active", true);
-        }
+        }*/
 
         // 新增：道具拼图吸附逻辑
         if (isPropPiece)
@@ -243,14 +243,8 @@ public class PuzzlePiece : MonoBehaviour
             isLocked = true;
             AudioManager.Instance.PlaySound("放下",transform.position);
             AddScore();
-            if (settings != null) settings.AddCombo(true); // ★★★ 新增：成功combo
             if (isPropPiece) OnPropPiecePlaced();
         }
-        else
-        {
-            if (settings != null) settings.AddCombo(false); // ★★★ 新增：失败combo归零
-        }
-        _moveCoroutine = null;
     }
 
     // 新增：协程，用于平滑改变Scale
@@ -385,7 +379,7 @@ public class PuzzlePiece : MonoBehaviour
         {
             if (settings != null)
             {
-                settings.currentScore += 1;
+                settings.DecreasePieceCount();
                 ShowScorePopup();
             }
         }

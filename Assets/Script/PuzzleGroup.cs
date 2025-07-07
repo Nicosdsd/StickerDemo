@@ -93,12 +93,12 @@ public class PuzzleGroup : MonoBehaviour
     void Update()
     {
        
-        if (settings != null && settings.currentScore >= settings.targetScore && !hasTimelinePlayed && timelineDirector != null)
+        if (settings != null && settings.remainingPieces <= 0 && !hasTimelinePlayed && timelineDirector != null)
         {
             timelineDirector.Play();
             hasTimelinePlayed = true;
             //AudioManager.Instance.PlaySound("完成",transform.position);
-            Debug.Log("目标分数已达到，播放 Timeline 动画。");
+            Debug.Log("全部拼图完成，播放 Timeline 动画。");
         }
 
         if (Input.GetMouseButtonDown(0) && targetClickObject != null)
