@@ -19,18 +19,19 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _ShineAngle
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: ce550553d3b10d646a45d85769f20531, type: 3}
+        m_Texture: {fileID: 2800000, guid: d877a75bc1e46fb4ca63cfd920531bfe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0
     - _ShineAngle: 145
-    - _ShineLocation: -1
+    - _ShineLocation: 2
     - _ShineWidth: 1
     m_Colors:
     - _ShineColor: {r: 11.984313, g: 11.984313, b: 11.984313, a: 1}

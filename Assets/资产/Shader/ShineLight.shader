@@ -58,8 +58,8 @@ Shader "Unlit/ShineLight"
             {
                 fixed4 maskCol = tex2D(_MaskTex, i.uv);
 
-                // Invert mask (assuming r channel is the mask value)
-                float invertedMask = 1.0 - maskCol.r;
+                // Invert mask (using alpha channel instead of red channel)
+                float invertedMask =  maskCol.a;
 
                 // Calculate shine direction and normalized progress
                 float angle_rad = _ShineAngle * UNITY_PI / 180.0;

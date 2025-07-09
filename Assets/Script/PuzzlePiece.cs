@@ -28,8 +28,8 @@ public class PuzzlePiece : MonoBehaviour
     public float DragScale = 1.2f;
     public float scaleSmoothSpeed = 5.0f; // 新增：缩放过渡速度
 
-    // 新增：成功吸附后要播放动画的Animator
-    public Animator successAnimator;
+    public float returnDelay = 0.5f; // 延迟返回初始位置的时间
+
 
     private Vector3 mouseWorldPosOnDragBegin; // 拖拽开始时鼠标的世界坐标（在拼图块深度）
     private Vector3 pieceWorldPosOnDragBegin; // 拖拽开始时拼图块的世界坐标
@@ -53,7 +53,6 @@ public class PuzzlePiece : MonoBehaviour
     public bool IsLocked => isLocked;
 
     public GameObject hintImage; // 拖拽提示图
-    //private Animator hintAnimator; // 提示图片的动画控制器
 
     private PlayableDirector playableDirector; // 新增：Timeline组件引用
 
@@ -63,6 +62,9 @@ public class PuzzlePiece : MonoBehaviour
     public Canvas mainCanvas; // 主Canvas
 
     public int priority = 0; // 生成优先级，0为最高，依次递增
+
+    // 新增：成功动画prefab
+    public GameObject effectPrefab; // 成功动画Prefab
 
     // 新增：强制完成拼图块的方法
     public void ForceComplete()
@@ -77,13 +79,14 @@ public class PuzzlePiece : MonoBehaviour
         DetectNeighborsAndTriggerAnimation();
         isLocked = true;
         _isDragging = false;
-        AudioManager.Instance.PlaySound("放下", transform.position);
+        //AudioManager.Instance.PlaySound("放下", transform.position);
         if (_latticeModifier != null) _latticeModifier.enabled = true;
     }
 
     // 初始化
     void Start()
     {
+       
         _startPosition = transform.position;
         //transform.localScale = Vector3.one * StartScale;
         animator = GetComponent<Animator>();
@@ -184,12 +187,7 @@ public class PuzzlePiece : MonoBehaviour
             _moveCoroutine = null;
         }
 
-        // 播放提示图片显示动画
-        /*if (hintAnimator != null)
-        {
-            hintAnimator.SetBool("active", true);
-        }*/
-
+    
         // 新增：道具拼图吸附逻辑
         if (isPropPiece)
         {
@@ -204,6 +202,7 @@ public class PuzzlePiece : MonoBehaviour
                 AudioManager.Instance.PlaySound("返回", transform.position);
                 _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false));
                 StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed));
+                
             }
             return;
         }
@@ -214,10 +213,18 @@ public class PuzzlePiece : MonoBehaviour
         }
         else
         {
+            //拖动失败飞回初始点
             AudioManager.Instance.PlaySound("返回", transform.position); // 在开始返回时播放音效
-            _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false)); // 移动回初始位置
-            StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed)); // 立刻开始向StartScale过渡
+            animator.SetTrigger("Fault");
+            StartCoroutine(DelayedReturnToStart()); // 使用延迟协程
         }
+    }
+    
+    private IEnumerator DelayedReturnToStart()
+    {
+        yield return new WaitForSeconds(returnDelay); // 延迟0.5秒，确保动画播放完成
+        _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false)); // 移动回初始位置
+        StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed)); // 立刻开始向StartScale过渡
     }
 
     /// <summary>
@@ -322,15 +329,18 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：播放成功吸附动画
     public void PlaySuccessAnimation()
     {
+        print("播放成功");
+
         AddLightLayer2ToChildMeshRenderers();
-        if (successAnimator != null)
+        
+        // 新增：实例化波纹特效
+        if (effectPrefab != null)
         {
-            print("播放成功动画");
-            successAnimator.SetTrigger("Success");
-             
-             // 启动协程，0.5秒后移除Light Layer2
-             StartCoroutine(RemoveLightLayerAfterDelay(1f));
+            GameObject successEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
         }
+        animator.SetTrigger("Success");
+        //animator.SetTrigger("Success");
+        //StartCoroutine(RemoveLightLayerAfterDelay(1f));
        
     }
 
