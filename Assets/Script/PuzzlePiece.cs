@@ -19,7 +19,7 @@ public class PuzzlePiece : MonoBehaviour
     public float dragSmoothSpeed = 30.0f; // 新增：拖拽时的平滑速度
 
     // 新增：点击时固定的向上偏移量
-    public float offsetOnClick = 2f;
+    public Vector3 offsetOnClick = new Vector3(0f, 2f, 0f);
     // 新增：向上拖拽时，拼图与手指距离拉远的系数
     public float dragFactor = 0.5f;
 
@@ -38,7 +38,7 @@ public class PuzzlePiece : MonoBehaviour
 
     public bool isLocked = false; // 新增：标记拼图块是否已锁定
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
-    private float _currentApplyingOffsetY = 0f; // 新增：用于平滑处理offsetOnClick的当前Y偏移值
+    private Vector3 _currentApplyingOffset = Vector3.zero; // 新增：用于平滑处理offsetOnClick的当前偏移值
     private DragCenter dragCenter;
     private LatticeModifier _latticeModifier; // 新增：LatticeModifier组件的引用
 
@@ -79,7 +79,7 @@ public class PuzzlePiece : MonoBehaviour
         DetectNeighborsAndTriggerAnimation();
         isLocked = true;
         _isDragging = false;
-        //AudioManager.Instance.PlaySound("放下", transform.position);
+        AudioManager.Instance.PlaySound("放下", transform.position);
         if (_latticeModifier != null) _latticeModifier.enabled = true;
     }
 
@@ -129,9 +129,9 @@ public class PuzzlePiece : MonoBehaviour
             Vector3 mousePos = Input.mousePosition;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mouseConversionZ));
             Vector3 delta = worldPos - mouseWorldPosOnDragBegin;
-            float targetY = pieceWorldPosOnDragBegin.y + _currentApplyingOffsetY + delta.y;
-            float upOffset = delta.y > 0 ? delta.y * dragFactor : 0f;
-            Vector3 targetPos = new Vector3(pieceWorldPosOnDragBegin.x + delta.x, targetY + upOffset, pieceWorldPosOnDragBegin.z + delta.z);
+            Vector3 targetPos = pieceWorldPosOnDragBegin + _currentApplyingOffset + delta;
+            float upOffset = delta.z > 0 ? delta.z * dragFactor : 0f;
+            targetPos += new Vector3(0f, 0f, upOffset);
             transform.position = Vector3.Lerp(transform.position, targetPos, Time.fixedDeltaTime * dragSmoothSpeed);
         }
     }
@@ -155,8 +155,8 @@ public class PuzzlePiece : MonoBehaviour
         mouseConversionZ = Camera.main.WorldToScreenPoint(transform.position).z;
         mouseWorldPosOnDragBegin = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mouseConversionZ));
 
-        _currentApplyingOffsetY = 0f; // 重置当前Y偏移
-        StartCoroutine(AnimateOffsetYValue(0f, offsetOnClick, scaleSmoothSpeed)); // 开始平滑Y偏移过渡
+        _currentApplyingOffset = Vector3.zero; // 重置当前偏移
+        StartCoroutine(AnimateOffsetValue(Vector3.zero, offsetOnClick, scaleSmoothSpeed)); // 开始平滑偏移过渡
 
         StartCoroutine(ChangeScaleOverTime(Vector3.one * DragScale, scaleSmoothSpeed));
 
@@ -269,17 +269,17 @@ public class PuzzlePiece : MonoBehaviour
         transform.localScale = targetScale; // 确保最终设置为目标值
     }
 
-    // 新增：协程，用于平滑改变当前的Y轴偏移值
-    private IEnumerator AnimateOffsetYValue(float startOffset, float endOffset, float speed)
+    // 新增：协程，用于平滑改变当前的偏移值
+    private IEnumerator AnimateOffsetValue(Vector3 startOffset, Vector3 endOffset, float speed)
     {
         float journey = 0f;
         while (journey <= 1.0f)
         {
             journey += Time.deltaTime * speed;
-            _currentApplyingOffsetY = Mathf.Lerp(startOffset, endOffset, journey);
+            _currentApplyingOffset = Vector3.Lerp(startOffset, endOffset, journey);
             yield return null;
         }
-        _currentApplyingOffsetY = endOffset; //  确保最终设置为目标值
+        _currentApplyingOffset = endOffset; //  确保最终设置为目标值
     }
 
     // 新增：当父对象移动后，调用此方法来更新拼图块的初始位置记录
@@ -331,14 +331,17 @@ public class PuzzlePiece : MonoBehaviour
     {
         print("播放成功");
 
-        AddLightLayer2ToChildMeshRenderers();
+        //AddLightLayer2ToChildMeshRenderers();
         
         // 新增：实例化波纹特效
         if (effectPrefab != null)
         {
             GameObject successEffect = Instantiate(effectPrefab, transform.position, transform.rotation);
         }
-        animator.SetTrigger("Success");
+        if(animator != null)
+        {
+            animator.SetTrigger("Success");
+        }
         //animator.SetTrigger("Success");
         //StartCoroutine(RemoveLightLayerAfterDelay(1f));
        
