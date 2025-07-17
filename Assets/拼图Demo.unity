@@ -21045,8 +21045,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b1f25e70cd6ce1438fbc727f831d451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.5
+  rotationSpeed: 10
   invertRotation: 1
+  rotationSmoothness: 0.1
+  autoRotationSpeed: 10
+  enableAutoRotation: 1
 --- !u!95 &1961174260
 Animator:
   serializedVersion: 7
