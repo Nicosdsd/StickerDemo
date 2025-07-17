@@ -3937,23 +3937,23 @@ MonoBehaviour:
   sounds:
   - name: "\u6293\u8D77"
     clip: {fileID: 8300000, guid: f3481a1bc06fdd04da93c7a950a80449, type: 3}
-    volume: 0.1
+    volume: 0.4
     minInterval: 0
     enableSpatialSound: 0
     maxDistance: 0
     minDistance: 0
     lastPlayedTime: 0
   - name: "\u653E\u4E0B"
-    clip: {fileID: 8300000, guid: 39801d4add9141840b1c441aea705c94, type: 3}
+    clip: {fileID: 8300000, guid: 63c0512db30914346a6a742645dbcd4e, type: 3}
     volume: 1
-    minInterval: 0
+    minInterval: 0.1
     enableSpatialSound: 0
     maxDistance: 0
     minDistance: 0
     lastPlayedTime: 0
   - name: "\u8FD4\u56DE"
     clip: {fileID: 8300000, guid: 6c39e8d3a4c19824899d7116f5138cb3, type: 3}
-    volume: 0.2
+    volume: 1
     minInterval: 0
     enableSpatialSound: 0
     maxDistance: 0
@@ -4003,7 +4003,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 811a27b8f56f3ad448317c616fe99b19, type: 3}
   m_Resource: {fileID: 8300000, guid: 811a27b8f56f3ad448317c616fe99b19, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5742,8 +5742,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421897617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.05547519, y: 0.37248826, z: -0.05579613, w: 0.9246955}
-  m_LocalPosition: {x: -5.72, y: 6.47, z: -9.32}
+  m_LocalRotation: {x: -0.23136675, y: 0.07118799, z: -0.28534108, w: 0.9273523}
+  m_LocalPosition: {x: -7.4846582, y: -9.390413, z: -13.074267}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12320,13 +12320,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041445945}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.12592533, y: -0.38429353, z: -0.12173961, w: 0.906444}
-  m_LocalPosition: {x: 6.63, y: 7.47, z: -8.82}
+  m_LocalRotation: {x: -0.24968609, y: -0.09785394, z: 0.35151017, w: 0.89695156}
+  m_LocalPosition: {x: 6.646328, y: -8.959715, z: -13.543822}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 36776286}
-  m_LocalEulerAnglesHint: {x: -18.775, y: -44.705, z: 712.48}
+  m_LocalEulerAnglesHint: {x: 0.649, y: -46.767, z: 926.173}
 --- !u!114 &1041445947
 MonoBehaviour:
   m_ObjectHideFlags: 0

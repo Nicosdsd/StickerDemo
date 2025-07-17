@@ -393,7 +393,7 @@ public class PuzzlePiece : MonoBehaviour
             if (settings != null)
             {
                 settings.DecreasePieceCount();
-                ShowScorePopup();
+                //ShowScorePopup();
             }
         }
         if (rewardStickers != null)
@@ -403,26 +403,26 @@ public class PuzzlePiece : MonoBehaviour
         }
     }
 
-    private void ShowScorePopup()
-    {
-        if (scorePopupPrefab != null && mainCanvas != null)
-        {
-            // 1. 3D世界坐标转屏幕坐标
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+    // private void ShowScorePopup()
+    // {
+    //     if (scorePopupPrefab != null && mainCanvas != null)
+    //     {
+    //         // 1. 3D世界坐标转屏幕坐标
+    //         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
-            // 2. 屏幕坐标转UI本地坐标
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                mainCanvas.transform as RectTransform,
-                screenPos,
-                mainCanvas.worldCamera,
-                out Vector2 localPoint
-            );
+    //         // 2. 屏幕坐标转UI本地坐标
+    //         RectTransformUtility.ScreenPointToLocalPointInRectangle(
+    //             mainCanvas.transform as RectTransform,
+    //             screenPos,
+    //             mainCanvas.worldCamera,
+    //             out Vector2 localPoint
+    //         );
 
-            // 3. 实例化Prefab并设置位置
-            GameObject popup = Instantiate(scorePopupPrefab, mainCanvas.transform);
-            popup.GetComponent<RectTransform>().anchoredPosition = localPoint;
-        }
-    }
+    //         // 3. 实例化Prefab并设置位置
+    //         GameObject popup = Instantiate(scorePopupPrefab, mainCanvas.transform);
+    //         popup.GetComponent<RectTransform>().anchoredPosition = localPoint;
+    //     }
+    // }
 
      // 在编辑器中绘制辅助线，方便调试
     private void OnDrawGizmosSelected()
