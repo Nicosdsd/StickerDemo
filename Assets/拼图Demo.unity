@@ -21046,7 +21046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0.5
-  invertRotation: 0
+  invertRotation: 1
 --- !u!95 &1961174260
 Animator:
   serializedVersion: 7
