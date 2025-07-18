@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Playables;
-using Lattice;
 using HighlightPlus;
 /// 用来控制拼图块，包括拼图块的初始化、拼图块的拖拽、拼图块的放置、拼图块的动画、拼图块的邻居检测。
 
@@ -38,7 +36,6 @@ public class PuzzlePiece : MonoBehaviour
     public bool isLocked = false; // 新增：标记拼图块是否已锁定
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
     private Vector3 _currentApplyingOffset = Vector3.zero; // 新增：用于平滑处理offsetOnClick的当前偏移值
-    private LatticeModifier _latticeModifier; // 新增：LatticeModifier组件的引用
 
     // 新增：是否为道具拼图
     public bool isPropPiece = false;
@@ -46,9 +43,7 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked => isLocked;
 
-    private PlayableDirector playableDirector; // 新增：Timeline组件引用
-
-    private Settings settings; // 新增：Settings实例字段
+    private PuzzleGroup puzzleGroup; // 修改：PuzzleGroup实例字段
 
     public int priority = 0; // 生成优先级，0为最高，依次递增
 
@@ -64,12 +59,15 @@ public class PuzzlePiece : MonoBehaviour
         transform.localScale = Vector3.one * DragScale;
         PlaySuccessAnimation();
         transform.parent = targetArea;
-        AddScore();
+        if (!isPropPiece)
+        {
+            puzzleGroup.DecreasePieceCount();
+        }
         DetectNeighborsAndTriggerAnimation();
         isLocked = true;
         _isDragging = false;
         AudioManager.Instance.PlaySound("放下", transform.position);
-        if (_latticeModifier != null) _latticeModifier.enabled = true;
+
     }
 
     // 初始化
@@ -77,15 +75,12 @@ public class PuzzlePiece : MonoBehaviour
     {
         _startPosition = transform.position;
         animator = GetComponent<Animator>();
-        _latticeModifier = GetComponentInChildren<LatticeModifier>(true);
-        if (_latticeModifier != null) _latticeModifier.enabled = false;
-        playableDirector = GetComponent<PlayableDirector>(); // 新增：获取Timeline组件
         
-        // 新增：查找Settings实例
-        settings = FindObjectOfType<Settings>();
-        if (settings == null)
+        // 修改：查找PuzzleGroup实例
+        puzzleGroup = FindObjectOfType<PuzzleGroup>();
+        if (puzzleGroup == null)
         {
-            Debug.LogError("未找到 Settings 组件，请确保场景中有 Settings 脚本。");
+            Debug.LogError("未找到 PuzzleGroup 组件，请确保场景中有 PuzzleGroup 脚本。");
         }
     }
 
@@ -215,8 +210,9 @@ public class PuzzlePiece : MonoBehaviour
             DetectNeighborsAndTriggerAnimation();
             isLocked = true;
             AudioManager.Instance.PlaySound("放下",transform.position);
-            AddScore();
             if (isPropPiece) OnPropPiecePlaced();
+            else puzzleGroup.DecreasePieceCount();
+            
         }
     }
 
@@ -336,25 +332,8 @@ public class PuzzlePiece : MonoBehaviour
     private void OnPropPiecePlaced()
     {
         GetComponent<MeshRenderer>().enabled = false;
-            
-        // 新增：播放Timeline动画
-        if (playableDirector != null)
-        {
-            playableDirector.Play();
-        }
     }
 
-    // 加分逻辑
-    private void AddScore()
-    {
-        if (!isPropPiece)
-        {
-            if (settings != null)
-            {
-                settings.DecreasePieceCount();
-            }
-        }
-    }
 
      // 在编辑器中绘制辅助线，方便调试
     private void OnDrawGizmosSelected()

@@ -796,6 +796,7 @@ MonoBehaviour:
   startGroup: {fileID: 60042575}
   endGroup: {fileID: 74136649}
   timelineDirector: {fileID: 317536599}
+  pieceCountText: {fileID: 2013057065}
 --- !u!1 &73459710
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,7 +871,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -881,11 +881,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &73459714
@@ -1504,7 +1500,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -1515,11 +1510,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &127839120
@@ -1871,7 +1862,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -1882,11 +1872,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 3
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &145710219
@@ -2482,7 +2468,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -2493,11 +2478,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &164936103
@@ -3302,6 +3283,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1082027919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!1 &218996974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 218996975}
+  - component: {fileID: 218996977}
+  - component: {fileID: 218996976}
+  m_Layer: 5
+  m_Name: "\u5269\u4F59\u751F\u547D"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &218996975
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218996974}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 935448963}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -2, y: -28}
+  m_SizeDelta: {x: 225.3159, y: 103}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &218996976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218996974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 80
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 5
+    m_MaxSize: 110
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 5
+--- !u!222 &218996977
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218996974}
+  m_CullTransparentMesh: 0
 --- !u!1 &231642743
 GameObject:
   m_ObjectHideFlags: 0
@@ -3376,7 +3436,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -3387,11 +3446,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &231642747
@@ -5164,7 +5219,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -5175,11 +5229,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &383801339
@@ -5531,7 +5581,6 @@ MonoBehaviour:
   targetArea: {fileID: 607910544}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -5542,11 +5591,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &386856647
@@ -6852,7 +6897,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -6863,11 +6907,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &451835918
@@ -7219,7 +7259,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -7230,11 +7269,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &481009673
@@ -7864,7 +7899,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -7875,11 +7909,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &526136754
@@ -9216,7 +9246,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -9227,11 +9256,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &680886422
@@ -9583,7 +9608,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -9594,11 +9618,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &682477422
@@ -10454,7 +10474,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -10465,11 +10484,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &802892360
@@ -11057,7 +11072,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -11068,11 +11082,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &879960905
@@ -11424,7 +11434,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -11435,11 +11444,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &900298959
@@ -11997,7 +12002,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -12008,11 +12012,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &902918532
@@ -12509,7 +12509,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -12520,11 +12519,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &911987545
@@ -12833,7 +12828,7 @@ RectTransform:
   - {fileID: 2042452641}
   - {fileID: 1241291858}
   - {fileID: 528189451}
-  - {fileID: 2013057063}
+  - {fileID: 218996975}
   - {fileID: 289770615}
   m_Father: {fileID: 1849036124}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13737,7 +13732,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -13748,11 +13742,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1071272313
@@ -14104,7 +14094,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -14115,11 +14104,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1074801975
@@ -15199,7 +15184,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -15210,11 +15194,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1192255438
@@ -15986,7 +15966,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -15997,11 +15976,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 3
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1370070538
@@ -16974,7 +16949,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -16985,11 +16959,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1460246345
@@ -17465,11 +17435,6 @@ MonoBehaviour:
   countdownText: {fileID: 1778302006}
   timeoutPanel: {fileID: 1459535614}
   countdownDuration: 30000
-  pieceCountText: {fileID: 2013057065}
-  remainingPieces: 36
-  targetPieceCount: 36
-  fillImage: {fileID: 0}
-  propGroup: {fileID: 0}
 --- !u!4 &1553651734
 Transform:
   m_ObjectHideFlags: 0
@@ -18287,7 +18252,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -18298,11 +18262,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1760558597
@@ -18792,7 +18752,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -18803,11 +18762,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1776988505
@@ -19238,7 +19193,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -19249,11 +19203,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1789005400
@@ -19605,7 +19555,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -19616,11 +19565,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1792286946
@@ -20131,7 +20076,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -20142,11 +20086,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1845439982
@@ -20455,6 +20395,7 @@ RectTransform:
   - {fileID: 1395465589}
   - {fileID: 1778302005}
   - {fileID: 1121006076}
+  - {fileID: 2013057063}
   - {fileID: 935448963}
   m_Father: {fileID: 1203353139}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20537,7 +20478,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -20548,11 +20488,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 2
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1850049665
@@ -20904,7 +20840,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -20915,11 +20850,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1889705935
@@ -21480,7 +21411,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -21491,11 +21421,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1937688890
@@ -21847,7 +21773,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -21858,11 +21783,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1950567927
@@ -22328,7 +22249,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -22339,11 +22259,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 3
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &1961472927
@@ -22816,14 +22732,13 @@ GameObject:
   - component: {fileID: 2013057063}
   - component: {fileID: 2013057066}
   - component: {fileID: 2013057065}
-  - component: {fileID: 2013057064}
   m_Layer: 5
-  m_Name: "\u5269\u4F59"
+  m_Name: "\u5269\u4F59\u62FC\u56FE"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2013057063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22836,35 +22751,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 935448963}
+  m_Father: {fileID: 1849036124}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: -28}
+  m_AnchoredPosition: {x: -452, y: 16}
   m_SizeDelta: {x: 225.3159, y: 103}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &2013057064
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013057062}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 711be44ad66e3475bb8172f2afbcc3e7, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2013057065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23156,7 +23049,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -23167,11 +23059,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &2062657359
@@ -23598,7 +23486,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -23609,11 +23496,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &2078585314
@@ -23965,7 +23848,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -23976,11 +23858,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 0
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &2081685905
@@ -24490,7 +24368,6 @@ MonoBehaviour:
   targetArea: {fileID: 0}
   snapDistance: 1.5
   neighborDetectionRadius: 1.5
-  score: 1
   snapSpeed: 40
   returnSpeed: 10
   dragSmoothSpeed: 60
@@ -24501,11 +24378,7 @@ MonoBehaviour:
   scaleSmoothSpeed: 20
   returnDelay: 0.3
   isLocked: 0
-  rewardStickers: []
   isPropPiece: 0
-  hintImage: {fileID: 0}
-  scorePopupPrefab: {fileID: 4340128333695789599, guid: 8a963a5b9541f414ca4d2b002c992cc3, type: 3}
-  mainCanvas: {fileID: 1686529908}
   priority: 1
   effectPrefab: {fileID: 458061911596555515, guid: a1499c1ab07d87f4a9343251e9f7b8dc, type: 3}
 --- !u!23 &2133283597

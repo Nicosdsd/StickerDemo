@@ -11,11 +11,6 @@ public class Settings : MonoBehaviour
     public GameObject timeoutPanel; // 时间到时要显示的UI Panel
     public float countdownDuration = 60f; // 倒计时总时长（秒）
 
-    [Header("拼图数量设置")]
-    public Text pieceCountText;
-    public int remainingPieces = 9; // 剩余拼图数量
-    public int targetPieceCount = 9; // 总拼图数量
-
     private float currentTime;
     private bool isTiming = false;
 
@@ -45,10 +40,6 @@ public class Settings : MonoBehaviour
             {
                 countdownText = t;
             }
-            else if (t.gameObject.name == pieceCountText.gameObject.name)
-            {
-                pieceCountText = t;
-            }
         }
 
         // Also re-find the timeout panel.
@@ -66,7 +57,6 @@ public class Settings : MonoBehaviour
         // Reset the timer when a scene is loaded/reloaded
         currentTime = countdownDuration;
         isTiming = true;
-        remainingPieces = targetPieceCount;
     }
 
     void Start()
@@ -118,11 +108,6 @@ public class Settings : MonoBehaviour
                 Debug.Log("时间到！");
             }
         }
-
-        if (pieceCountText != null)
-        {
-            pieceCountText.text = "" + remainingPieces + "块";
-        }
     }
 
     // 调用此方法来重置场景
@@ -159,17 +144,5 @@ public class Settings : MonoBehaviour
             }
         }
         Debug.Log("All puzzles completed via backdoor!");
-    }
-
-    // 新增：减少拼图数量的方法
-    public void DecreasePieceCount()
-    {
-        remainingPieces--;
-        if (remainingPieces <= 0)
-        {
-            remainingPieces = 0;
-            // TODO: 通关逻辑，比如弹窗、暂停等
-            Debug.Log("全部拼图完成！");
-        }
     }
 }

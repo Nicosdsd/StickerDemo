@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Playables;
@@ -18,9 +20,51 @@ public class PuzzleGroup : MonoBehaviour
     public PlayableDirector timelineDirector;
     private bool hasTimelinePlayed = false;
 
+    private int targetPieceCount;
+    
+    [Header("拼图数量设置")]
+    public Text pieceCountText; // 用于显示拼图数量的UI Text
+    private int remainingPieces; // 剩余拼图数量
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 重新查找UI元素
+        Text[] texts = FindObjectsOfType<Text>(true);
+        foreach (var t in texts)
+        {
+            if (pieceCountText != null && t.gameObject.name == pieceCountText.gameObject.name)
+            {
+                pieceCountText = t;
+                break;
+            }
+        }
+        
+        // 重新初始化拼图数量
+        targetPieceCount = transform.childCount;
+        remainingPieces = targetPieceCount;
+        
+        Debug.Log($"场景重载后PuzzleGroup初始化：总拼图数量 = {targetPieceCount}");
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // 根据子物体数量自动设置targetPieceCount
+        targetPieceCount = transform.childCount;
+        remainingPieces = targetPieceCount;
+        
+        Debug.Log($"PuzzleGroup初始化：总拼图数量 = {targetPieceCount}");
+        
         if (startGroup != null && endGroup != null)
         {
             if (startGroup.childCount != endGroup.childCount)
@@ -55,6 +99,12 @@ public class PuzzleGroup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 更新拼图数量UI
+        if (pieceCountText != null)
+        {
+            pieceCountText.text = "" + remainingPieces + "块";
+        }
+        
         // 新逻辑：哪个目标没拼图就补哪个，始终保证3个目标有拼图
         if (target1 != null && target1.childCount == 0)
         {
@@ -67,6 +117,18 @@ public class PuzzleGroup : MonoBehaviour
         if (target3 != null && target3.childCount == 0)
         {
             AssignRandomChildToTarget(target3);
+        }
+    }
+
+    // 新增：减少拼图数量的方法
+    public void DecreasePieceCount()
+    {
+        remainingPieces--;
+        if (remainingPieces <= 0)
+        {
+            remainingPieces = 0;
+            // TODO: 通关逻辑，比如弹窗、暂停等
+            Debug.Log("全部拼图完成！");
         }
     }
 
