@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Playables;
 
-[System.Serializable]
-public struct PropChanceStep
-{
-    public int refreshThreshold; // 从第几次刷新开始
-    [Range(0, 1)]
-    public float chance;       // 道具出现的概率
-}
+///用来控制拼图组，包括拼图的初始化、拼图的随机分配、拼图的复位和随机化。
+
 
 public class PuzzleGroup : MonoBehaviour
 {
@@ -19,37 +14,13 @@ public class PuzzleGroup : MonoBehaviour
 
     public Transform startGroup;
     public Transform endGroup;
-    public Transform PropGroup;
-
-    public GameObject targetClickObject;
-
-    public List<PropChanceStep> propChanceProgression = new List<PropChanceStep>
-    {
-        new PropChanceStep { refreshThreshold = 1, chance = 1.0f },
-        new PropChanceStep { refreshThreshold = 2, chance = 0.5f },
-        new PropChanceStep { refreshThreshold = 8, chance = 0.1f }
-    };
 
     public PlayableDirector timelineDirector;
     private bool hasTimelinePlayed = false;
 
-    private List<Transform> propPiecePool = new List<Transform>();
-    private int refreshCount = 0;
-
-    public Settings settings;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (settings == null)
-        {
-            settings = FindObjectOfType<Settings>();
-            if (settings == null)
-            {
-                Debug.LogError("未找到 Settings 组件，请在 Inspector 中赋值或确保场景中有 Settings 脚本。");
-            }
-        }
-        
         if (startGroup != null && endGroup != null)
         {
             if (startGroup.childCount != endGroup.childCount)
@@ -75,14 +46,6 @@ public class PuzzleGroup : MonoBehaviour
             }
         }
 
-        if (PropGroup != null)
-        {
-            foreach (Transform prop in PropGroup)
-            {
-                propPiecePool.Add(prop);
-            }
-        }
-
         // 保证每个目标初始都有拼图
         if (target1 != null && target1.childCount == 0) AssignRandomChildToTarget(target1);
         if (target2 != null && target2.childCount == 0) AssignRandomChildToTarget(target2);
@@ -92,28 +55,6 @@ public class PuzzleGroup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        if (settings != null && settings.remainingPieces <= 0 && !hasTimelinePlayed && timelineDirector != null)
-        {
-            timelineDirector.Play();
-            hasTimelinePlayed = true;
-            //AudioManager.Instance.PlaySound("完成",transform.position);
-            Debug.Log("全部拼图完成，播放 Timeline 动画。");
-        }
-
-        if (Input.GetMouseButtonDown(0) && targetClickObject != null)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject == targetClickObject)
-                {
-                    AudioManager.Instance.PlaySound("按压", transform.position);
-                }
-            }
-        }
-
         // 新逻辑：哪个目标没拼图就补哪个，始终保证3个目标有拼图
         if (target1 != null && target1.childCount == 0)
         {
@@ -127,22 +68,6 @@ public class PuzzleGroup : MonoBehaviour
         {
             AssignRandomChildToTarget(target3);
         }
-    }
-
-    float GetCurrentPropChance()
-    {
-        // 对列表按刷新阈值降序排序
-        propChanceProgression.Sort((a, b) => b.refreshThreshold.CompareTo(a.refreshThreshold));
-        
-        foreach (var step in propChanceProgression)
-        {
-            if (refreshCount >= step.refreshThreshold)
-            {
-                return step.chance;
-            }
-        }
-        
-        return 0f; // 默认概率为0
     }
 
     public void AssignRandomChildToTarget(Transform target)
@@ -204,14 +129,7 @@ public class PuzzleGroup : MonoBehaviour
             // Move each child back to the parent transform (the pool)
             foreach (Transform child in childrenToMove)
             {
-                if (propPiecePool.Contains(child))
-                {
-                    child.SetParent(PropGroup);
-                }
-                else
-                {
-                    child.SetParent(transform);
-                }
+                child.SetParent(transform);
                 child.localPosition = Vector3.zero; // Optional: Reset position
             }
         };

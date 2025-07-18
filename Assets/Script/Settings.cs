@@ -19,13 +19,6 @@ public class Settings : MonoBehaviour
     private float currentTime;
     private bool isTiming = false;
 
-    public Image fillImage;
-
-    private float currentFillAmount = 0f;
-    private float fillAmountVelocity = 0f; // 用于SmoothDamp
-
-    public PropGroup propGroup; // 在Inspector拖拽赋值
-
     void Awake()
     {
         // 移除单例相关逻辑
@@ -129,18 +122,6 @@ public class Settings : MonoBehaviour
         if (pieceCountText != null)
         {
             pieceCountText.text = "" + remainingPieces + "块";
-        }
-        // 使用SmoothDamp平滑fillImage的fillAmount
-        if (fillImage != null && targetPieceCount > 0)
-        {
-            float targetFill = (float)remainingPieces / targetPieceCount;
-            currentFillAmount = Mathf.SmoothDamp(currentFillAmount, targetFill, ref fillAmountVelocity, 0.15f); // 0.15f为缓动时间，可调整
-            fillImage.fillAmount = currentFillAmount;
-            // 同步PropGroup的progress
-            if (propGroup != null)
-            {
-                propGroup.progress = fillImage.fillAmount;
-            }
         }
     }
 

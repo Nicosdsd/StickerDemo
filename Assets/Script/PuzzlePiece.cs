@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Playables;
 using Lattice;
 using HighlightPlus;
+/// 用来控制拼图块，包括拼图块的初始化、拼图块的拖拽、拼图块的放置、拼图块的动画、拼图块的邻居检测。
+
 
 public class PuzzlePiece : MonoBehaviour
 {
@@ -12,7 +14,6 @@ public class PuzzlePiece : MonoBehaviour
     public float snapDistance = 1.0f; // 自动吸附的距离阈值
     private Animator animator; // 动画控制器
     public float neighborDetectionRadius = 2.0f; // 检测邻近拼图块的半径
-    public int score = 1;
     // 缓动速度
     public float snapSpeed = 5.0f; // 修改：拼图块吸附到目标位置的速度
     public float returnSpeed = 8.0f; // 新增：拼图块返回初始位置的速度
@@ -30,21 +31,14 @@ public class PuzzlePiece : MonoBehaviour
 
     public float returnDelay = 0.5f; // 延迟返回初始位置的时间
 
-
     private Vector3 mouseWorldPosOnDragBegin; // 拖拽开始时鼠标的世界坐标（在拼图块深度）
     private Vector3 pieceWorldPosOnDragBegin; // 拖拽开始时拼图块的世界坐标
     private float mouseConversionZ; // 鼠标屏幕坐标到世界坐标转换时使用的Z深度
 
-
     public bool isLocked = false; // 新增：标记拼图块是否已锁定
     private Coroutine _moveCoroutine; // 新增：用于跟踪移动协程
     private Vector3 _currentApplyingOffset = Vector3.zero; // 新增：用于平滑处理offsetOnClick的当前偏移值
-    private DragCenter dragCenter;
     private LatticeModifier _latticeModifier; // 新增：LatticeModifier组件的引用
-
-    private AudioSource currentLoopingSound; // 当前正在播放的循环音效
-
-    public RewardSticker[] rewardStickers;
 
     // 新增：是否为道具拼图
     public bool isPropPiece = false;
@@ -52,14 +46,9 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：公共 getter 用于检查拼图块是否已锁定
     public bool IsLocked => isLocked;
 
-    public GameObject hintImage; // 拖拽提示图
-
     private PlayableDirector playableDirector; // 新增：Timeline组件引用
 
     private Settings settings; // 新增：Settings实例字段
-
-    public GameObject scorePopupPrefab; // 加分Prefab
-    public Canvas mainCanvas; // 主Canvas
 
     public int priority = 0; // 生成优先级，0为最高，依次递增
 
@@ -86,13 +75,10 @@ public class PuzzlePiece : MonoBehaviour
     // 初始化
     void Start()
     {
-       
         _startPosition = transform.position;
-        //transform.localScale = Vector3.one * StartScale;
         animator = GetComponent<Animator>();
         _latticeModifier = GetComponentInChildren<LatticeModifier>(true);
         if (_latticeModifier != null) _latticeModifier.enabled = false;
-        dragCenter = FindObjectOfType<DragCenter>();
         playableDirector = GetComponent<PlayableDirector>(); // 新增：获取Timeline组件
         
         // 新增：查找Settings实例
@@ -101,24 +87,12 @@ public class PuzzlePiece : MonoBehaviour
         {
             Debug.LogError("未找到 Settings 组件，请确保场景中有 Settings 脚本。");
         }
-        
-        // 获取提示图片的动画控制器
-        /*if (hintImage != null)
-        {
-            hintAnimator = hintImage.GetComponent<Animator>();
-            if (hintAnimator != null)
-            {
-                hintAnimator.SetBool("active", true);
-            }
-            hintImage.SetActive(true);
-        }*/
     }
 
     // 每帧更新
     void Update()
     {
-
-      
+        
     }
 
     // 新增：固定更新，用于物理相关的更新，比如拖拽
@@ -160,12 +134,6 @@ public class PuzzlePiece : MonoBehaviour
 
         StartCoroutine(ChangeScaleOverTime(Vector3.one * DragScale, scaleSmoothSpeed));
 
-        // 播放提示图片隐藏动画
-        /*if (hintAnimator != null)
-        {
-            hintAnimator.SetBool("active", false);
-        }*/
-
         print("拖拽");
         AudioManager.Instance.PlaySound("抓起",transform.position);
     }
@@ -187,7 +155,6 @@ public class PuzzlePiece : MonoBehaviour
             _moveCoroutine = null;
         }
 
-    
         // 新增：道具拼图吸附逻辑
         if (isPropPiece)
         {
@@ -202,7 +169,6 @@ public class PuzzlePiece : MonoBehaviour
                 AudioManager.Instance.PlaySound("返回", transform.position);
                 _moveCoroutine = StartCoroutine(MoveToPosition(_startPosition, false));
                 StartCoroutine(ChangeScaleOverTime(Vector3.one * StartScale, scaleSmoothSpeed));
-                
             }
             return;
         }
@@ -285,7 +251,6 @@ public class PuzzlePiece : MonoBehaviour
     // 新增：当父对象移动后，调用此方法来更新拼图块的初始位置记录
     public void UpdateBaseStartPosition()
     {
-        
         if (!isLocked && !_isDragging)
         {
             _startPosition = transform.position;
@@ -330,8 +295,6 @@ public class PuzzlePiece : MonoBehaviour
     public void PlaySuccessAnimation()
     {
         print("播放成功");
-
-        //AddLightLayer2ToChildMeshRenderers();
         
         // 新增：实例化波纹特效
         if (effectPrefab != null)
@@ -342,9 +305,6 @@ public class PuzzlePiece : MonoBehaviour
         {
             animator.SetTrigger("Success");
         }
-        //animator.SetTrigger("Success");
-        //StartCoroutine(RemoveLightLayerAfterDelay(1f));
-       
     }
 
     // 新增：协程，延迟指定时间后移除Light Layer2
@@ -353,7 +313,6 @@ public class PuzzlePiece : MonoBehaviour
         yield return new WaitForSeconds(delay);
         RemoveLightLayer2FromChildMeshRenderers();
     }
-
 
     // 新增：查找最近的TargetArea（仅用于道具拼图）
     private Transform FindNearestTargetArea()
@@ -393,36 +352,9 @@ public class PuzzlePiece : MonoBehaviour
             if (settings != null)
             {
                 settings.DecreasePieceCount();
-                //ShowScorePopup();
             }
         }
-        if (rewardStickers != null)
-        {
-            foreach (var sticker in rewardStickers)
-                if (sticker != null) sticker.AddScore(1);
-        }
     }
-
-    // private void ShowScorePopup()
-    // {
-    //     if (scorePopupPrefab != null && mainCanvas != null)
-    //     {
-    //         // 1. 3D世界坐标转屏幕坐标
-    //         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-
-    //         // 2. 屏幕坐标转UI本地坐标
-    //         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-    //             mainCanvas.transform as RectTransform,
-    //             screenPos,
-    //             mainCanvas.worldCamera,
-    //             out Vector2 localPoint
-    //         );
-
-    //         // 3. 实例化Prefab并设置位置
-    //         GameObject popup = Instantiate(scorePopupPrefab, mainCanvas.transform);
-    //         popup.GetComponent<RectTransform>().anchoredPosition = localPoint;
-    //     }
-    // }
 
      // 在编辑器中绘制辅助线，方便调试
     private void OnDrawGizmosSelected()
