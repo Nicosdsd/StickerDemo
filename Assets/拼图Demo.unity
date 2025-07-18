@@ -17435,7 +17435,7 @@ MonoBehaviour:
   countdownText: {fileID: 1778302006}
   timeoutPanel: {fileID: 1459535614}
   countdownDuration: 30000
-  maxHealth: 10
+  maxHealth: 100
   healthText: {fileID: 218996976}
   gameOverPanel: {fileID: 1459535614}
 --- !u!4 &1553651734
