@@ -11,12 +11,21 @@ public class Settings : MonoBehaviour
     public GameObject timeoutPanel; // 时间到时要显示的UI Panel
     public float countdownDuration = 60f; // 倒计时总时长（秒）
 
+    // 新增：生命值系统
+    [Header("生命值设置")]
+    public int maxHealth = 3; // 最大生命值
+    public Text healthText; // 用于显示生命值的UI Text
+    public GameObject gameOverPanel; // 生命值为0时要显示的UI Panel
+    
+    private int currentHealth; // 当前生命值
     private float currentTime;
     private bool isTiming = false;
 
     void Awake()
     {
         // 移除单例相关逻辑
+        // 初始化生命值
+        currentHealth = maxHealth;
     }
 
     void OnEnable()
@@ -40,6 +49,11 @@ public class Settings : MonoBehaviour
             {
                 countdownText = t;
             }
+            // 新增：查找生命值UI Text
+            if (healthText != null && t.gameObject.name == healthText.gameObject.name)
+            {
+                healthText = t;
+            }
         }
 
         // Also re-find the timeout panel.
@@ -54,9 +68,24 @@ public class Settings : MonoBehaviour
             }
         }
 
+        // 新增：查找游戏结束面板
+        if (gameOverPanel != null)
+        {
+            GameObject newGameOverPanel = GameObject.Find(gameOverPanel.name);
+            if(newGameOverPanel != null)
+            {
+                gameOverPanel = newGameOverPanel;
+                gameOverPanel.SetActive(false); // Ensure it's hidden on load
+            }
+        }
+
         // Reset the timer when a scene is loaded/reloaded
         currentTime = countdownDuration;
         isTiming = true;
+        
+        // 重置生命值
+        currentHealth = maxHealth;
+        UpdateHealthDisplay();
     }
 
     void Start()
@@ -67,6 +96,15 @@ public class Settings : MonoBehaviour
         {
             timeoutPanel.SetActive(false);
         }
+        
+        // 新增：确保游戏结束面板隐藏
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
+        
+        // 初始化生命值显示
+        UpdateHealthDisplay();
     }
 
     void Update()
@@ -108,6 +146,49 @@ public class Settings : MonoBehaviour
                 Debug.Log("时间到！");
             }
         }
+    }
+
+    // 新增：更新生命值显示
+    private void UpdateHealthDisplay()
+    {
+        if (healthText != null)
+        {
+            healthText.text = currentHealth.ToString();
+        }
+    }
+
+    // 新增：减少生命值
+    public void DecreaseHealth()
+    {
+        if (currentHealth > 0)
+        {
+            currentHealth--;
+            UpdateHealthDisplay();
+            
+            Debug.Log("生命值减少，当前生命值: " + currentHealth);
+            
+            // 检查是否生命值为0
+            if (currentHealth <= 0)
+            {
+                GameOver();
+            }
+        }
+    }
+
+    // 新增：游戏结束
+    private void GameOver()
+    {
+        isTiming = false; // 停止倒计时
+        
+        // 显示游戏结束面板
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+        
+        // 游戏暂停
+        PauseGame();
+        Debug.Log("游戏结束！生命值为0");
     }
 
     // 调用此方法来重置场景

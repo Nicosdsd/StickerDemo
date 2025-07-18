@@ -44,6 +44,7 @@ public class PuzzlePiece : MonoBehaviour
     public bool IsLocked => isLocked;
 
     private PuzzleGroup puzzleGroup; // 修改：PuzzleGroup实例字段
+    private Settings settings; // 新增：Settings实例字段
 
     public int priority = 0; // 生成优先级，0为最高，依次递增
 
@@ -81,6 +82,13 @@ public class PuzzlePiece : MonoBehaviour
         if (puzzleGroup == null)
         {
             Debug.LogError("未找到 PuzzleGroup 组件，请确保场景中有 PuzzleGroup 脚本。");
+        }
+        
+        // 新增：查找Settings实例
+        settings = FindObjectOfType<Settings>();
+        if (settings == null)
+        {
+            Debug.LogError("未找到 Settings 组件，请确保场景中有 Settings 脚本。");
         }
     }
 
@@ -177,6 +185,13 @@ public class PuzzlePiece : MonoBehaviour
             //拖动失败飞回初始点
             AudioManager.Instance.PlaySound("返回", transform.position); // 在开始返回时播放音效
             animator.SetTrigger("Fault");
+            
+            // 新增：拼错时扣除生命值
+            if (settings != null)
+            {
+                settings.DecreaseHealth();
+            }
+            
             StartCoroutine(DelayedReturnToStart()); // 使用延迟协程
         }
     }
@@ -210,9 +225,7 @@ public class PuzzlePiece : MonoBehaviour
             DetectNeighborsAndTriggerAnimation();
             isLocked = true;
             AudioManager.Instance.PlaySound("放下",transform.position);
-            if (isPropPiece) OnPropPiecePlaced();
-            else puzzleGroup.DecreasePieceCount();
-            
+            if (!isPropPiece) puzzleGroup.DecreasePieceCount();
         }
     }
 
@@ -326,12 +339,6 @@ public class PuzzlePiece : MonoBehaviour
             }
         }
         return nearest;
-    }
-
-    // 新增：道具拼图放置成功后的回调（暂时留空）
-    private void OnPropPiecePlaced()
-    {
-        GetComponent<MeshRenderer>().enabled = false;
     }
 
 
